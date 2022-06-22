@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "1027441227082",
+    "project_id": "gofact-flutter",
+    "storage_bucket": "gofact-flutter.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027441227082:android:963362f341c89917847db3",
+        "android_client_info": {
+          "package_name": "com.GoFact.gofact"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1027441227082-vbh80pilskh1154g0156o2mu4r3caraj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAep_gdA1FGVVHfm_JmVCKY7m3v4zBFSmQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1027441227082-vbh80pilskh1154g0156o2mu4r3caraj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:1027441227082:android:484a4d4539a0f4b3847db3",
+        "android_client_info": {
+          "package_name": "com.gofact.gofact"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "1027441227082-vbh80pilskh1154g0156o2mu4r3caraj.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAep_gdA1FGVVHfm_JmVCKY7m3v4zBFSmQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "1027441227082-vbh80pilskh1154g0156o2mu4r3caraj.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
