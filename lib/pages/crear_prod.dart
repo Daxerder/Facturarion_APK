@@ -1,23 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:gofact/models/user.dart';
-import 'package:firebase_core/firebase_core.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gofact/models/clases.dart';
+import 'package:gofact/providers/list_prod.dart';
+import 'package:provider/provider.dart';
+import 'package:path_provider/path_provider.dart';
 
 class Crear_Producto extends StatefulWidget {
-  final int contador;
-  Crear_Producto(this.contador);
   @override
   State<Crear_Producto> createState() => _Crear_Producto();
 }
 
 class _Crear_Producto extends State<Crear_Producto> {
   @override
-  var cont;
-  void initState() {
-    cont = this.widget.contador;
-    super.initState();
-  }
-
   Producto _lista = Producto();
 
   var _producto = TextEditingController(),
@@ -71,18 +64,25 @@ class _Crear_Producto extends State<Crear_Producto> {
                   style: TextStyle(color: Colors.white),
                 ),
                 style: TextButton.styleFrom(backgroundColor: Colors.blue),
-                onPressed: () {
+                onPressed: () async {
+                  print("entro al pressed");
                   if (_producto.text != '' &&
                       _cantidad.text != '' &&
                       _precio.text != '') {
                     _lista.descripcion = _producto.text;
                     _lista.cantidad = int.parse(_cantidad.text);
                     _lista.total = double.parse(_precio.text);
-                    temporal(_lista);
-                    cont++;
-                    print(cont);
 
-                    Navigator.of(context).pop(cont);
+                    print("entro al if");
+                    print(_lista.cantidad);
+
+                    final proListProvider =
+                        Provider.of<ProductoProvider>(context, listen: false);
+                    final producto = await ProductoProvider()
+                        .newProducto(_lista)
+                        .then((value) => print(_lista))
+                        .catchError((e) => print("error: $e"));
+                    Navigator.of(context).pop();
                   } else {
                     SnackBar snack = SnackBar(
                       content: Text('Rellenar todos los campos'),
@@ -96,23 +96,5 @@ class _Crear_Producto extends State<Crear_Producto> {
         ),
       ),
     );
-  }
-
-  temporal(Producto temporal) {
-    DocumentReference documentReference =
-        FirebaseFirestore.instance.collection("temporal").doc(cont.toString());
-
-    documentReference
-        .set(
-          {
-            "id": cont,
-            "cantidad": temporal.cantidad,
-            "descripcion": temporal.descripcion,
-            "total": temporal.total
-          },
-          SetOptions(merge: false),
-        )
-        .catchError((error) => print("falla $error"))
-        .whenComplete(() => print("exito"));
   }
 }

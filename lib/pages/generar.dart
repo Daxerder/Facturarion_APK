@@ -1,11 +1,7 @@
-import 'dart:convert';
-import 'dart:ffi';
-
 import 'package:flutter/material.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:gofact/models/modf_prod.dart';
-import 'package:gofact/models/user.dart';
+import 'package:gofact/models/clases.dart';
+import 'package:gofact/widgets/prodProvider.dart';
 import 'ingreso.dart';
 import 'crear_prod.dart';
 import 'emision.dart';
@@ -19,28 +15,10 @@ class Generar extends StatefulWidget {
 class _Generar extends State<Generar> {
   @override
   String f_emi = "";
-  var corr_fact = 0, corr_bol = 0;
+  //var corr_fact = 0, corr_bol = 0;
   void initState() {
     hoy();
-    getCorrelativos();
     super.initState();
-  }
-
-  void getCorrelativos() async {
-    CollectionReference facturas =
-        FirebaseFirestore.instance.collection("facturas");
-
-    QuerySnapshot fact = await facturas.get();
-
-    corr_fact = fact.docs.length;
-
-    CollectionReference boletas =
-        FirebaseFirestore.instance.collection("boletas");
-
-    QuerySnapshot bol = await boletas.get();
-
-    corr_bol = bol.docs.length;
-    print(corr_bol);
   }
 
   hoy() {
@@ -196,10 +174,8 @@ class _Generar extends State<Generar> {
                   if (empresa.text != '') {
                     if (tipo == 'Factura') {
                       comprobante.serie = 'F001';
-                      comprobante.correlativo = corr_fact + 1;
                     } else {
                       comprobante.serie = 'B001';
-                      comprobante.correlativo = corr_bol + 1;
                     }
                     comprobante.cliente.documento = documento.text;
                     comprobante.cliente.direccion = direccion.text;
@@ -254,14 +230,14 @@ class _Generar extends State<Generar> {
                 if (actualpaso != mispasos().length - 1)
                   Expanded(
                     child: ElevatedButton(
-                      child: Text('next'),
+                      child: Text('Siguiente'),
                       onPressed: details.onStepContinue,
                     ),
                   ),
                 if (actualpaso == mispasos().length - 1)
                   Expanded(
                     child: ElevatedButton(
-                      child: Text('emitir'),
+                      child: Text('Emitir'),
                       onPressed: () {
                         Navigator.push(
                             context,
@@ -279,7 +255,7 @@ class _Generar extends State<Generar> {
                 if (actualpaso != 0)
                   Expanded(
                     child: ElevatedButton(
-                      child: Text('atras'),
+                      child: Text('Atras'),
                       onPressed: details.onStepCancel,
                     ),
                   ),
@@ -294,33 +270,34 @@ class _Generar extends State<Generar> {
   Widget pag1() {
     return Column(
       children: <Widget>[
-        Container(
-          //width: 300,
-          padding: EdgeInsets.fromLTRB(0, 20, 10, 0),
-          child: DropdownButton(
-            dropdownColor: Colors.white,
-            isExpanded: true,
-            items: _listtipo.map((String a) {
-              return DropdownMenuItem(value: a, child: Text(a));
-            }).toList(),
-            onChanged: (_value) => {
-              setState(() {
-                tipo = _value.toString();
-              }),
-            },
-            hint: Text(
-              tipo,
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
+        DropdownButton(
+          //borderRadius: BorderRadius.circular(20),
+          iconEnabledColor: Colors.white,
+          dropdownColor: Colors.white,
+          isExpanded: true,
+          items: _listtipo.map((String a) {
+            return DropdownMenuItem(
+              value: a,
+              child: Text(a),
+            );
+          }).toList(),
+          onChanged: (_value) => {
+            setState(() {
+              tipo = _value.toString();
+            }),
+          },
+          hint: Text(
+            tipo,
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
             ),
           ),
         ),
         TextFormField(
           controller: documento,
           decoration: InputDecoration(
-              labelText: 'documento/Dni',
+              labelText: 'Documento',
               labelStyle: TextStyle(color: Colors.white)),
           style: TextStyle(color: Colors.white),
         ),
@@ -368,31 +345,32 @@ class _Generar extends State<Generar> {
               labelStyle: TextStyle(color: Colors.white)),
           style: TextStyle(color: Colors.white),
         ),
-        Container(
-          //width: 300,
-          padding: EdgeInsets.fromLTRB(0, 20, 10, 0),
-          child: DropdownButton(
-            dropdownColor: Colors.white,
-            isExpanded: true,
-            items: _listmon.map((String a) {
-              return DropdownMenuItem(value: a, child: Text(a));
-            }).toList(),
-            onChanged: (_value) => {
-              setState(() {
-                _tipomon[0] = _value.toString();
-                if (_tipomon[0] == 'Soles') {
-                  _tipomon[1] = 'S/.';
-                } else {
-                  _tipomon[1] = 'USD';
-                }
-              }),
-            },
-            hint: Text(
-              _tipomon[0],
-              style: TextStyle(
-                color: Colors.white,
-                fontSize: 20,
-              ),
+        DropdownButton(
+          iconEnabledColor: Colors.white,
+          dropdownColor: Colors.white,
+          isExpanded: true,
+          items: _listmon.map((String a) {
+            return DropdownMenuItem(
+              value: a,
+              child: Text(a),
+              alignment: AlignmentDirectional.center,
+            );
+          }).toList(),
+          onChanged: (_value) => {
+            setState(() {
+              _tipomon[0] = _value.toString();
+              if (_tipomon[0] == 'Soles') {
+                _tipomon[1] = 'S/.';
+              } else {
+                _tipomon[1] = 'USD';
+              }
+            }),
+          },
+          hint: Text(
+            _tipomon[0],
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 18,
             ),
           ),
         ),
@@ -416,8 +394,8 @@ class _Generar extends State<Generar> {
         Container(
           height: 40,
           alignment: Alignment.center,
-          decoration: BoxDecoration(
-              color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          //decoration: BoxDecoration(
+          //color: Colors.white, borderRadius: BorderRadius.circular(10)),
           child: Row(
             children: [
               Container(
@@ -426,7 +404,7 @@ class _Generar extends State<Generar> {
                 width: 80,
                 child: Text(
                   'Cantidad',
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),
               Expanded(
@@ -434,7 +412,7 @@ class _Generar extends State<Generar> {
                   alignment: Alignment.centerLeft,
                   child: Text(
                     'Descripcion',
-                    style: TextStyle(fontSize: 16),
+                    style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
                 ),
               ),
@@ -443,107 +421,20 @@ class _Generar extends State<Generar> {
                 width: 90,
                 child: Text(
                   "Total",
-                  style: TextStyle(fontSize: 16),
+                  style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
               ),
             ],
           ),
         ),
-        StreamBuilder<QuerySnapshot>(
-          stream: FirebaseFirestore.instance.collection("temporal").snapshots(),
-          builder:
-              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-            if (snapshot.hasData) {
-              return ListView.builder(
-                  shrinkWrap: true,
-                  itemBuilder: (context, index) {
-                    DocumentSnapshot doc_temp = snapshot.data!.docs[index];
-                    return Container(
-                      margin: EdgeInsets.symmetric(vertical: 10),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                          color: Colors.white,
-                          borderRadius: BorderRadius.circular(10)),
-                      child: ListTile(
-                        onTap: () {
-                          AlertDialog alerta = AlertDialog(
-                            title: Row(
-                              children: [
-                                Expanded(
-                                  child: Text("remover",
-                                      textAlign: TextAlign.center),
-                                ),
-                                Expanded(
-                                  child: Text("modificar",
-                                      textAlign: TextAlign.center),
-                                ),
-                              ],
-                            ),
-                            content: Row(
-                              children: [
-                                Expanded(
-                                  child: IconButton(
-                                    color: Colors.red,
-                                    icon: Icon(Icons.remove_circle),
-                                    onPressed: () {
-                                      delete(doc_temp['id']);
-                                      Navigator.of(context).pop();
-                                    },
-                                  ),
-                                ),
-                                Expanded(
-                                  child: IconButton(
-                                    color: Colors.green,
-                                    icon: Icon(Icons.change_circle),
-                                    onPressed: () {
-                                      Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      Modf_Producto(doc_temp)))
-                                          .then((value) =>
-                                              Navigator.of(context).pop());
-                                    },
-                                  ),
-                                ),
-                              ],
-                            ),
-                          );
-                          showDialog(
-                              context: context,
-                              builder: (BuildContext context) => alerta);
-                        },
-                        title: Container(
-                          alignment: Alignment.centerLeft,
-                          child: Text(doc_temp['descripcion']),
-                        ),
-                        leading: Container(
-                          //adelante
-                          alignment: Alignment.center,
-                          width: 50,
-                          child: Text(doc_temp['cantidad'].toString()),
-                        ),
-                        trailing: Container(
-                          alignment: Alignment.center,
-                          width: 90,
-                          child: Text(_tipomon[1] +
-                              ' ' +
-                              (doc_temp['total'] * doc_temp['cantidad'])
-                                  .toString()),
-                        ),
-                      ),
-                      //al final
-                    );
-                  },
-                  itemCount: snapshot.data!.docs.length);
-            } else {
-              return const Align(
-                alignment: FractionalOffset.bottomCenter,
-                child: CircularProgressIndicator(),
-              );
-            }
-          },
-        ),
+        Container(
+            margin: EdgeInsets.symmetric(vertical: 10),
+            alignment: Alignment.center,
+            decoration: BoxDecoration(
+                color: Colors.white, borderRadius: BorderRadius.circular(10)),
+            child: ProductWidget(
+              tipo: _tipomon[1],
+            )),
         Row(
           children: [
             Expanded(
@@ -552,16 +443,9 @@ class _Generar extends State<Generar> {
                 color: Colors.white,
                 onPressed: () {
                   Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => Crear_Producto(_contador)))
-                      .then((result) {
-                    if (result != null) {
-                      setState(() {
-                        _contador = result;
-                      });
-                    }
-                  });
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => Crear_Producto()));
                 },
                 icon: Icon(Icons.add_circle),
               ),

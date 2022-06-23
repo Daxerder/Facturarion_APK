@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:gofact/models/ingreso.dart';
-import 'user.dart';
+import 'package:gofact/pages/ingreso.dart';
+import '../models/clases.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
@@ -55,9 +55,10 @@ class _Emision extends State<Emision> {
         .catchError((error) => print("Fallo: $error"));
   }
 
-  void emitir() {
+  void emitir() async {
     print("emitir");
     print(_productos.length);
+    comp.correlativo = await correlativo();
     DocumentReference documentReference;
     print(comp.serie);
     if (comp.serie == 'F001') {
@@ -89,6 +90,24 @@ class _Emision extends State<Emision> {
         )
         .catchError((error) => print("falla $error"))
         .whenComplete(() => print("exito"));
+  }
+
+  Future<int> correlativo() async {
+    if (comp.serie == 'F001') {
+      CollectionReference facturas =
+          FirebaseFirestore.instance.collection("facturas");
+
+      QuerySnapshot fact = await facturas.get();
+
+      return fact.docs.length + 1;
+    } else {
+      CollectionReference boletas =
+          FirebaseFirestore.instance.collection("boletas");
+
+      QuerySnapshot bol = await boletas.get();
+
+      return bol.docs.length + 1;
+    }
   }
 
   @override

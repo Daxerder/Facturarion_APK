@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'ingreso.dart';
-import 'user.dart';
+import '../models/clases.dart';
 
 class Reporte extends StatefulWidget {
   static const String ruta = "/reporte";
