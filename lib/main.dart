@@ -29,6 +29,7 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(create: (context) => new ProductoProvider()),
       ],
       child: MaterialApp(
+        debugShowCheckedModeBanner: false,
         routes: <String, WidgetBuilder>{
           Ingreso.ruta: (BuildContext context) => Ingreso(),
           Inicio.ruta: (BuildContext context) => Inicio(),

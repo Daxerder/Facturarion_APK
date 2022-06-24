@@ -28,8 +28,8 @@ class DB {
       await db.execute(''' CREATE TABLE Productos(
         id INTEGER PRIMARY KEY AUTOINCREMENT,
         descripcion TEXT,
-        cantidad NUMERIC,
-        total NUMERIC
+        cantidad REAL,
+        total REAL
         )''');
     });
   }

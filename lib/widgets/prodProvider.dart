@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gofact/db/sqlite.dart';
 import 'package:provider/provider.dart';
 import 'package:gofact/providers/list_prod.dart';
 
@@ -9,6 +10,7 @@ class ProductWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final prodListProvider = Provider.of<ProductoProvider>(context);
     final productos = prodListProvider.productos;
+    print("prouctos: $productos");
     if (productos.length != 0) {
       return ListView.builder(
         itemCount: productos.length,
