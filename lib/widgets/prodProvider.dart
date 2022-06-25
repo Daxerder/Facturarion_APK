@@ -10,7 +10,8 @@ class ProductWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     final prodListProvider = Provider.of<ProductoProvider>(context);
     final productos = prodListProvider.productos;
-    print("prouctos: $productos");
+    var cons = productos.length;
+    print("prouctos: $cons");
     if (productos.length != 0) {
       return ListView.builder(
         itemCount: productos.length,

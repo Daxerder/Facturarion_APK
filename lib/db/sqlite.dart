@@ -62,7 +62,9 @@ class DB {
     final db = await database;
     final resp = await db?.query('Productos');
 
-    return resp!.isEmpty ? resp.map((e) => Producto.fromJson(e)).toList() : [];
+    return resp!.isNotEmpty
+        ? resp.map((e) => Producto.fromJson(e)).toList()
+        : [];
   }
 
   Future<int?> updateProducto(Producto producto, id) async {
