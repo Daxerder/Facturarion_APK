@@ -281,9 +281,10 @@ class _Reporte extends State<Reporte> {
           tipo_mon = [];
           mostrar = [];
           total = [];
-          //FACTURAS
+
           if (parametros[0].toString() != '') {
             error = '';
+            //FACTURAS
             if (parametros[0].toString() == 'Facturas') {
               anadirFact();
             }
@@ -319,6 +320,8 @@ class _Reporte extends State<Reporte> {
         body: ListView.builder(
             itemCount: mostrar.length,
             itemBuilder: (context, index) {
+              print("mostrar");
+              print(mostrar.length);
               return Container(
                 margin: EdgeInsets.symmetric(vertical: 10),
                 alignment: Alignment.center,
@@ -379,6 +382,7 @@ class _Reporte extends State<Reporte> {
       for (var i = 0; i < _facturas.length; i++) {
         if (_facturas[i]['moneda'] == 'Soles') {
           mostrar.add(_facturas[i]);
+          total.add(Total(_facturas[i]['productos']));
           tipo_mon.add('S/.');
         }
       }
@@ -386,6 +390,7 @@ class _Reporte extends State<Reporte> {
       for (var i = 0; i < _facturas.length; i++) {
         if (_facturas[i]['moneda'] == 'Dolares') {
           mostrar.add(_facturas[i]);
+          total.add(Total(_facturas[i]['productos']));
           tipo_mon.add('USD');
         }
       }
@@ -407,6 +412,7 @@ class _Reporte extends State<Reporte> {
       for (var i = 0; i < _boletas.length; i++) {
         if (_boletas[i]['moneda'] == 'Soles') {
           mostrar.add(_boletas[i]);
+          total.add(Total(_boletas[i]['productos']));
           tipo_mon.add('S/.');
         }
       }
@@ -414,6 +420,7 @@ class _Reporte extends State<Reporte> {
       for (var i = 0; i < _boletas.length; i++) {
         if (_boletas[i]['moneda'] == 'Dolares') {
           mostrar.add(_boletas[i]);
+          total.add(Total(_boletas[i]['productos']));
           tipo_mon.add('USD');
         }
       }
