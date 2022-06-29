@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gofact/db/sqlite.dart';
 import 'ingreso.dart';
 
 class Inicio extends StatefulWidget {
@@ -10,6 +11,9 @@ class Inicio extends StatefulWidget {
 class _Inicio extends State<Inicio> {
   @override
   Widget build(BuildContext context) {
+    DB.db.database;
+    //DB.db.getTodosProductos().then(print);
+
     ListView lista = ListView(
       children: [
         const DrawerHeader(

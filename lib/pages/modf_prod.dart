@@ -1,27 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:gofact/db/sqlite.dart';
 import 'package:gofact/models/clases.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Modf_Producto extends StatefulWidget {
-  final documento;
-  Modf_Producto(this.documento);
+  final Producto producto;
+  Modf_Producto(this.producto);
   @override
   State<Modf_Producto> createState() => _Modf_Producto();
 }
 
 class _Modf_Producto extends State<Modf_Producto> {
+  Producto _lista = Producto();
   @override
-  var doc;
   void initState() {
-    doc = this.widget.documento;
-    _producto.text = doc['descripcion'];
-    _cantidad.text = doc['cantidad'].toString();
-    _precio.text = doc['total'].toString();
+    _lista.id = this.widget.producto.id;
+    _producto.text = this.widget.producto.descripcion;
+    _cantidad.text = this.widget.producto.cantidad.toString();
+    _precio.text = this.widget.producto.total.toString();
     super.initState();
   }
-
-  Producto _lista = Producto();
 
   var _producto = TextEditingController(),
       _cantidad = TextEditingController(),
@@ -76,10 +75,9 @@ class _Modf_Producto extends State<Modf_Producto> {
                       _cantidad.text != '' &&
                       _precio.text != '') {
                     _lista.descripcion = _producto.text;
-                    _lista.cantidad = int.parse(_cantidad.text);
+                    _lista.cantidad = double.parse(_cantidad.text);
                     _lista.total = double.parse(_precio.text);
-                    temporal(_lista);
-
+                    DB.db.updateProducto(_lista, _lista.id);
                     Navigator.of(context).pop();
                   } else {
                     SnackBar snack = SnackBar(
@@ -94,23 +92,5 @@ class _Modf_Producto extends State<Modf_Producto> {
         ),
       ),
     );
-  }
-
-  temporal(Producto temporal) {
-    DocumentReference documentReference = FirebaseFirestore.instance
-        .collection("temporal")
-        .doc(doc['id'].toString());
-
-    documentReference
-        .update(
-          {
-            "id": doc['id'],
-            "cantidad": temporal.cantidad,
-            "descripcion": temporal.descripcion,
-            "total": temporal.total
-          },
-        )
-        .then((value) => print("Modificado"))
-        .catchError((error) => print("fallo la modificacion: $error"));
   }
 }

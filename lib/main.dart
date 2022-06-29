@@ -38,7 +38,7 @@ class MyApp extends StatelessWidget {
           Registrar.ruta: (BuildContext context) => Registrar(),
           //Visualizacion.ruta: (BuildContext context) => Visualizacion(),
         },
-        initialRoute: "/ingreso",
+        initialRoute: "/inicio",
       ),
     );
   }

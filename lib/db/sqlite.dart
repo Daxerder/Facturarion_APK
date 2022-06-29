@@ -58,13 +58,15 @@ class DB {
     return resp!.isNotEmpty ? Producto.fromJson(resp.first) : null;
   }
 
-  Future<List<Producto>?> getTodosProductos() async {
+  Future<List<Producto>> getTodosProductos() async {
     final db = await database;
     final resp = await db?.query('Productos');
+    List<Producto> lista = resp!.map((e) => Producto.fromJson(e)).toList();
 
-    return resp!.isNotEmpty
+    /*return resp!.isNotEmpty
         ? resp.map((e) => Producto.fromJson(e)).toList()
-        : [];
+        : [];*/
+    return lista;
   }
 
   Future<int?> updateProducto(Producto producto, id) async {

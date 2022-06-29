@@ -70,7 +70,7 @@ class _Crear_Producto extends State<Crear_Producto> {
                       _cantidad.text != '' &&
                       _precio.text != '') {
                     _lista.descripcion = _producto.text;
-                    _lista.cantidad = int.parse(_cantidad.text);
+                    _lista.cantidad = double.parse(_cantidad.text);
                     _lista.total = double.parse(_precio.text);
 
                     print("entro al if");

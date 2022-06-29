@@ -26,7 +26,7 @@ class Empresa {
 class Producto {
   int id;
   double total;
-  int cantidad;
+  double cantidad;
   String descripcion;
 
   Producto({

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:gofact/db/sqlite.dart';
 import 'package:gofact/pages/ingreso.dart';
 import '../models/clases.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,7 +7,8 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class Emision extends StatefulWidget {
   final FoB comprobante;
-  Emision(this.comprobante);
+  final List<Producto> prod;
+  Emision(this.comprobante, this.prod);
   @override
   State<Emision> createState() => _Emision();
 }
@@ -14,35 +16,29 @@ class Emision extends StatefulWidget {
 class _Emision extends State<Emision> {
   FoB comp = FoB();
   List _productos = [];
+  List _prueba = [];
 
   @override
   void initState() {
     comp = this.widget.comprobante;
-    getProd();
-
-    print(comp.cliente.documento);
+    //_productos = this.widget.prod;
+    arraymap();
+    emitir();
     super.initState();
   }
 
-  void getProd() async {
-    CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection("temporal");
-
-    QuerySnapshot prod =
-        await collectionReference.get(); //await porq es un future
-
-    if (prod.docs.length != 0) {
-      //docs cantidad de documentos
-      for (var doc in prod.docs) {
-        _productos.add(doc.data());
-        print(_productos.length);
-      }
+  arraymap() {
+    for (var i = 0; i < this.widget.prod.length; i++) {
+      Map<String, dynamic> producto = {
+        'descripcion': this.widget.prod[i].descripcion,
+        'cantidad': this.widget.prod[i].cantidad,
+        'total': this.widget.prod[i].total,
+      };
+      setState(() {
+        _productos.add(producto);
+      });
     }
-
-    for (var i = 0; i < _productos.length; i++) {
-      delete(_productos[i]['id']);
-    }
-    emitir();
+    print(_productos);
   }
 
   delete(borrar) {
@@ -89,23 +85,22 @@ class _Emision extends State<Emision> {
           SetOptions(merge: false),
         )
         .catchError((error) => print("falla $error"))
-        .whenComplete(() => print("exito"));
+        .whenComplete(() {
+          DB.db.deleteAllProductos();
+          print("exito");
+        });
   }
 
   Future<int> correlativo() async {
     if (comp.serie == 'F001') {
       CollectionReference facturas =
           FirebaseFirestore.instance.collection("facturas");
-
       QuerySnapshot fact = await facturas.get();
-
       return fact.docs.length + 1;
     } else {
       CollectionReference boletas =
           FirebaseFirestore.instance.collection("boletas");
-
       QuerySnapshot bol = await boletas.get();
-
       return bol.docs.length + 1;
     }
   }

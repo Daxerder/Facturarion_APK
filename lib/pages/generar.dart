@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gofact/models/clases.dart';
-import 'package:gofact/widgets/prodProvider.dart';
+import 'package:gofact/db/sqlite.dart';
+import 'package:gofact/pages/modf_prod.dart';
 import 'ingreso.dart';
 import 'crear_prod.dart';
 import 'emision.dart';
@@ -15,8 +16,10 @@ class Generar extends StatefulWidget {
 class _Generar extends State<Generar> {
   @override
   String f_emi = "";
-  //var corr_fact = 0, corr_bol = 0;
+  List<Producto> _productos = [];
   void initState() {
+    DB.db.deleteAllProductos();
+    //_loadProd();
     hoy();
     super.initState();
   }
@@ -29,9 +32,15 @@ class _Generar extends State<Generar> {
     f_emi = dia + '/' + mes + '/' + ano;
   }
 
+  _loadProd() async {
+    List<Producto> lista = await DB.db.getTodosProductos();
+    setState(() {
+      _productos = lista;
+    });
+  }
+
   FoB comprobante = FoB();
 
-  List _productos = [];
   List<String> _listmon = ['Soles', 'Dolares'];
   List<String> _tipomon = ['Moneda', '']; //soles, S/.--Dolar, USD
   List<String> _listtipo = ['Factura', 'Boleta'];
@@ -190,7 +199,6 @@ class _Generar extends State<Generar> {
                   break;
                 case 1:
                   if (_tipomon[0] != 'Moneda') {
-                    _productos = [];
                     comprobante.f_emi = emision.text;
                     comprobante.f_venc = vencimiento.text;
                     comprobante.moneda = _tipomon[0];
@@ -205,10 +213,8 @@ class _Generar extends State<Generar> {
                 case 2:
               }
               print(actualpaso);
-
               emision.text = f_emi;
               //documento.text = 'as'; para cambiar valor de text
-
             } else {
               print("ultimo step");
             }
@@ -239,10 +245,16 @@ class _Generar extends State<Generar> {
                     child: ElevatedButton(
                       child: Text('Emitir'),
                       onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Emision(comprobante)));
+                        if (_productos.isNotEmpty) {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Emision(comprobante, _productos)));
+                        } else {
+                          print("ingresar Producto");
+                        }
+
                         //print(comprobante.productos[1].total);
                         //print(contador);
                         //delete_temp();
@@ -428,13 +440,13 @@ class _Generar extends State<Generar> {
           ),
         ),
         Container(
-            margin: EdgeInsets.symmetric(vertical: 10),
-            alignment: Alignment.center,
-            decoration: BoxDecoration(
-                color: Colors.white, borderRadius: BorderRadius.circular(10)),
-            child: ProductWidget(
-              tipo: _tipomon[1],
-            )),
+          margin: EdgeInsets.symmetric(vertical: 10),
+          alignment: Alignment.center,
+          decoration: BoxDecoration(
+              color: Colors.white, borderRadius: BorderRadius.circular(10)),
+          child: ProductWidget(),
+        ),
+        //tipo: _tipomon[1],
         Row(
           children: [
             Expanded(
@@ -445,7 +457,11 @@ class _Generar extends State<Generar> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (context) => Crear_Producto()));
+                          builder: (context) => Crear_Producto())).then(
+                    (value) => setState(() {
+                      _loadProd();
+                    }),
+                  );
                 },
                 icon: Icon(Icons.add_circle),
               ),
@@ -454,6 +470,93 @@ class _Generar extends State<Generar> {
         ),
       ],
     );
+  }
+
+  Widget ProductWidget() {
+    if (_productos.isNotEmpty) {
+      return ListView.builder(
+        shrinkWrap: true,
+        itemCount: _productos.length,
+        itemBuilder: (BuildContext context, int index) {
+          Producto prod = _productos[index];
+          print("productos: $prod");
+          return ListTile(
+            onTap: () {
+              AlertDialog alerta = AlertDialog(
+                title: Row(
+                  children: [
+                    Expanded(
+                      child: Text("remover", textAlign: TextAlign.center),
+                    ),
+                    Expanded(
+                      child: Text("modificar", textAlign: TextAlign.center),
+                    ),
+                  ],
+                ),
+                content: Row(
+                  children: [
+                    Expanded(
+                      child: IconButton(
+                        color: Colors.red,
+                        icon: Icon(Icons.remove_circle),
+                        onPressed: () {
+                          DB.db.deleteProducto(prod.id).then((value) {
+                            _loadProd();
+                            Navigator.of(context).pop();
+                          });
+                        },
+                      ),
+                    ),
+                    Expanded(
+                      child: IconButton(
+                        color: Colors.green,
+                        icon: Icon(Icons.change_circle),
+                        onPressed: () {
+                          Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) =>
+                                      Modf_Producto(prod))).then((value) {
+                            _loadProd();
+                            Navigator.of(context).pop();
+                          });
+                        },
+                      ),
+                    ),
+                  ],
+                ),
+              );
+              showDialog(
+                  context: context, builder: (BuildContext context) => alerta);
+            },
+            title: Container(
+              alignment: Alignment.centerLeft,
+              child: Text(prod.descripcion),
+            ),
+            leading: Container(
+              //adelante
+              alignment: Alignment.center,
+              width: 50,
+              child: Text(prod.cantidad.toString()),
+            ),
+            trailing: Container(
+              alignment: Alignment.center,
+              width: 90,
+              child: Text(
+                  _tipomon[1] + ' ' + (prod.total * prod.cantidad).toString()),
+            ),
+          );
+        },
+      );
+    } else {
+      return SizedBox(
+        height: 50,
+        child: Align(
+          alignment: Alignment.center,
+          child: Text("Ingresar Productos"),
+        ),
+      );
+    }
   }
 
   delete(borrar) {

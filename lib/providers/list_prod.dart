@@ -18,12 +18,12 @@ class ProductoProvider extends ChangeNotifier {
     return producto;
   }
 
-  cargarProductos() async {
+  /*cargarProductos() async {
     final productos = await DB.db.getTodosProductos();
     this.productos = [...?productos];
     print(productos);
     notifyListeners();
-  }
+  }*/
 
   borrarTodosProductos() async {
     print("entro en borrar todos");
@@ -35,6 +35,5 @@ class ProductoProvider extends ChangeNotifier {
   borrarProductoXID(int id) async {
     print("entro en borrar x id");
     await DB.db.deleteProducto(id);
-    notifyListeners();
   }
 }
