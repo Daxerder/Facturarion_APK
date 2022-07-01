@@ -36,9 +36,8 @@ class MyApp extends StatelessWidget {
           Reporte.ruta: (BuildContext context) => Reporte(),
           Generar.ruta: (BuildContext context) => Generar(),
           Registrar.ruta: (BuildContext context) => Registrar(),
-          //Visualizacion.ruta: (BuildContext context) => Visualizacion(),
         },
-        initialRoute: "/inicio",
+        initialRoute: "/ingreso",
       ),
     );
   }

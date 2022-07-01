@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gofact/db/sqlite.dart';
+import 'package:gofact/models/clases.dart';
+import 'package:gofact/pages/emision.dart';
 import 'ingreso.dart';
 
 class Inicio extends StatefulWidget {
@@ -9,6 +11,8 @@ class Inicio extends StatefulWidget {
 }
 
 class _Inicio extends State<Inicio> {
+  FoB comprobante = FoB();
+  List<Producto> _productos = [];
   @override
   Widget build(BuildContext context) {
     DB.db.database;
@@ -94,6 +98,12 @@ class _Inicio extends State<Inicio> {
         drawer: Drawer(
           child: lista,
         ),
+        /*body: FloatingActionButton(onPressed: () {
+          Navigator.push(
+              context,
+              MaterialPageRoute(
+                  builder: (context) => Emision(comprobante, _productos)));
+        }),*/
       ),
     );
   }

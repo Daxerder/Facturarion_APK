@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gofact/db/sqlite.dart';
 import 'package:gofact/pages/ingreso.dart';
+import 'package:webview_flutter/webview_flutter.dart';
 import '../models/clases.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'dart:convert';
 
 class Emision extends StatefulWidget {
   final FoB comprobante;
@@ -14,6 +17,7 @@ class Emision extends StatefulWidget {
 }
 
 class _Emision extends State<Emision> {
+  late WebViewController controller;
   FoB comp = FoB();
   List _productos = [];
   List _prueba = [];
@@ -39,16 +43,6 @@ class _Emision extends State<Emision> {
       });
     }
     print(_productos);
-  }
-
-  delete(borrar) {
-    DocumentReference documentReference = FirebaseFirestore.instance
-        .collection("temporal")
-        .doc(borrar.toString());
-    documentReference
-        .delete()
-        .then((value) => print("borrado id" + borrar.toString()))
-        .catchError((error) => print("Fallo: $error"));
   }
 
   void emitir() async {
@@ -103,6 +97,31 @@ class _Emision extends State<Emision> {
       QuerySnapshot bol = await boletas.get();
       return bol.docs.length + 1;
     }
+  }
+
+  String a = "asd";
+
+  final html = '''<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>{1+5}</h1>
+</body>
+</html>''';
+
+  void loadLocalHtml() async {
+    final url = Uri.dataFromString(
+      html,
+      mimeType: 'text/html',
+      encoding: Encoding.getByName('utf-8'),
+    ).toString();
+
+    controller.loadUrl(url);
   }
 
   @override
@@ -228,7 +247,57 @@ class _Emision extends State<Emision> {
               ],
             ),
           ),
-        ),
+        ), /*WebView(
+          javascriptMode: JavascriptMode.unrestricted,
+          //initialUrl: 'https://www.netflix.com/',
+          onWebViewCreated: (controller) {
+            this.controller = controller;
+            loadLocalHtml();
+          },
+        ),*/
+
+        /*Center(
+          child: Container(
+            height: 250,
+            decoration: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(10),
+            ),
+            child: Column(
+              children: [
+                SizedBox(
+                  height: 200,
+                  width: 200,
+                  child: Column(
+                    children: [
+                      Container(
+                        height: 150,
+                        child: Icon(
+                          Icons.check_circle,
+                          color: Colors.green,
+                          size: 100,
+                        ),
+                      ),
+                      Container(
+                        alignment: Alignment.center,
+                        //height: 50,
+                        child: Text(
+                          "Emitido con Exito",
+                          textAlign: TextAlign.center,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                ElevatedButton(
+                    onPressed: () {
+                      Navigator.of(context).pushNamed("/inicio");
+                    },
+                    child: Text("INICIO"))
+              ],
+            ),
+          ),
+        ),*/
       ),
     );
   }

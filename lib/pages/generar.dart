@@ -309,7 +309,7 @@ class _Generar extends State<Generar> {
         TextFormField(
           controller: documento,
           decoration: InputDecoration(
-              labelText: 'Documento',
+              labelText: 'Documento Cliente',
               labelStyle: TextStyle(color: Colors.white)),
           style: TextStyle(color: Colors.white),
         ),
