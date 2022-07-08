@@ -112,6 +112,7 @@ class _Modf_Producto extends State<Modf_Producto> {
   bool validar_text(String texto) {
     String palabra = texto;
     String nueva = '';
+    palabra = palabra.trim();
     for (var i = 0; i < palabra.length; i++) {
       if (!texto[i].contains(RegExp(r"[a-záéíóúüñA-ZÑ1-9 ]"))) {
         return false;

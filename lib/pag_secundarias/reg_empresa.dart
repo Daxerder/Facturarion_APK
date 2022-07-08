@@ -140,6 +140,8 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
                       );
                       ScaffoldMessenger.of(context).showSnackBar(snack);
                     } else {
+                      Direccion = quitar_espacios(Direccion);
+                      Empresa = quitar_espacios(Empresa);
                       List _empresas = await getEmpresas();
                       /*for(var i = 0; i < _empresas.length;i++){}*/
                       print(_empresas);
@@ -221,12 +223,32 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
 
   bool validar_text(String texto) {
     String palabra = texto;
+
     for (var i = 0; i < palabra.length; i++) {
       if (!texto[i].contains(RegExp(r"[a-záéíóúüñA-ZÑ0-9. -]"))) {
         return false;
       }
     }
+
     return true;
+  }
+
+  String quitar_espacios(String palabra) {
+    String nueva = '';
+    palabra = palabra.trim();
+    for (var i = 0; i < palabra.length; i++) {
+      if (palabra[i] != ' ') {
+        nueva = nueva + palabra[i];
+        //si la sig posicion es menor a la long total de la palabra te aumenta 1
+        //espacio
+        if (i + 1 < palabra.length) {
+          if (palabra[i + 1] == ' ') {
+            nueva = nueva + ' ';
+          }
+        }
+      }
+    }
+    return nueva;
   }
 
   bool validar_doc(String texto) {
