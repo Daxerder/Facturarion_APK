@@ -26,7 +26,7 @@ class _Crear_Producto extends State<Crear_Producto> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text("Reportes"),
+          title: const Text("Ingresar Producto"),
         ),
         body: SingleChildScrollView(
           child: Padding(
@@ -40,7 +40,7 @@ class _Crear_Producto extends State<Crear_Producto> {
                   decoration: const InputDecoration(
                       labelText: 'Producto',
                       labelStyle: TextStyle(color: Colors.white)),
-                  style: TextStyle(color: Colors.white),
+                  style: const TextStyle(color: Colors.white),
                   controller: _producto,
                   validator: (value) {
                     String text = value.toString();

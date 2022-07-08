@@ -527,10 +527,10 @@ class _Generar extends State<Generar> {
                     Row(
                       children: const <Widget>[
                         Expanded(
-                          child: Text("remover", textAlign: TextAlign.center),
+                          child: Text("Eliminar", textAlign: TextAlign.center),
                         ),
                         Expanded(
-                          child: Text("modificar", textAlign: TextAlign.center),
+                          child: Text("Modificar", textAlign: TextAlign.center),
                         ),
                       ],
                     ),

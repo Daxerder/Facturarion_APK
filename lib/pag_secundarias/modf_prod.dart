@@ -33,7 +33,7 @@ class _Modf_Producto extends State<Modf_Producto> {
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: const Text("Modificar"),
+          title: const Text("Modificar Producto"),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
