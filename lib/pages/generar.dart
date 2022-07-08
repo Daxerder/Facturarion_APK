@@ -484,14 +484,21 @@ class _Generar extends State<Generar> {
                 iconSize: 40,
                 color: Colors.white,
                 onPressed: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => Crear_Producto())).then(
-                    (value) => setState(() {
-                      _loadProd();
-                    }),
-                  );
+                  if (_productos.length < 10) {
+                    Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                            builder: (context) => Crear_Producto())).then(
+                      (value) => setState(() {
+                        _loadProd();
+                      }),
+                    );
+                  } else {
+                    SnackBar snack = const SnackBar(
+                      content: Text('Productos Maximos alcanzados'),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snack);
+                  }
                 },
                 icon: const Icon(Icons.add_circle),
               ),
@@ -513,13 +520,19 @@ class _Generar extends State<Generar> {
           return ListTile(
             onTap: () {
               AlertDialog alerta = AlertDialog(
-                title: Row(
-                  children: const <Widget>[
-                    Expanded(
-                      child: Text("remover", textAlign: TextAlign.center),
-                    ),
-                    Expanded(
-                      child: Text("modificar", textAlign: TextAlign.center),
+                title: Column(
+                  children: [
+                    Text(prod.descripcion),
+                    const SizedBox(height: 10),
+                    Row(
+                      children: const <Widget>[
+                        Expanded(
+                          child: Text("remover", textAlign: TextAlign.center),
+                        ),
+                        Expanded(
+                          child: Text("modificar", textAlign: TextAlign.center),
+                        ),
+                      ],
                     ),
                   ],
                 ),
