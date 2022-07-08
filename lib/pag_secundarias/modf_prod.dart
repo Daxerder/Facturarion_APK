@@ -64,7 +64,7 @@ class _Modf_Producto extends State<Modf_Producto> {
               ),
               TextButton(
                 child: const Text(
-                  "Modificar Compra",
+                  "Registrar Compra",
                   style: TextStyle(color: Colors.white),
                 ),
                 style: TextButton.styleFrom(backgroundColor: Colors.blue),
