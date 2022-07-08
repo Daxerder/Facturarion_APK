@@ -2,9 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gofact/models/clases.dart';
 import 'package:gofact/db/sqlite.dart';
-import 'package:gofact/pages/modf_prod.dart';
+import 'package:gofact/pag_secundarias/modf_prod.dart';
 import 'ingreso.dart';
-import 'crear_prod.dart';
+import '../pag_secundarias/crear_prod.dart';
 import 'emision.dart';
 
 class Generar extends StatefulWidget {
@@ -30,6 +30,7 @@ class _Generar extends State<Generar> {
         mes = emi.substring(5, 7),
         dia = emi.substring(8, 10);
     f_emi = dia + '/' + mes + '/' + ano;
+    vencimiento.text = f_emi;
   }
 
   _loadProd() async {
@@ -89,7 +90,7 @@ class _Generar extends State<Generar> {
             color: Colors.transparent,
           ),
           child: Center(
-            child: Text('Pacman 22'),
+            child: Text('Facturacion Electronica'),
           ),
         ),
         /*AboutListTile(
@@ -104,40 +105,44 @@ class _Generar extends State<Generar> {
           title: const Text("Inicio"),
           onTap: () {
             setState(() {
-              Navigator.of(context).pushNamed("/inicio");
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/inicio", (route) => false);
             });
           },
         ),
         ListTile(
-          leading: Icon(Icons.add),
-          title: Text("Generar"),
+          leading: const Icon(Icons.add),
+          title: const Text("Generar"),
           onTap: () {
             setState(() {
-              Navigator.of(context).pushNamed("/generar");
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/generar", (route) => false);
             });
           },
         ),
         ListTile(
-          leading: Icon(Icons.book),
-          title: Text("Reporte"),
+          leading: const Icon(Icons.book),
+          title: const Text("Reporte"),
           onTap: () {
             setState(() {
-              Navigator.of(context).pushNamed("/reporte");
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/reporte", (route) => false);
             });
           },
         ),
         ListTile(
-          leading: Icon(Icons.app_registration),
-          title: Text("Registrar"),
+          leading: const Icon(Icons.app_registration),
+          title: const Text("Registrar Empresa"),
           onTap: () {
             setState(() {
-              Navigator.of(context).pushNamed("/registrar");
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/registrar", (route) => false);
             });
           },
         ),
         ListTile(
-          leading: Icon(Icons.exit_to_app),
-          title: Text("Cerrar Sesion"),
+          leading: const Icon(Icons.exit_to_app),
+          title: const Text("Cerrar Sesion"),
           onTap: () {
             setState(() {
               Navigator.of(context).pushAndRemoveUntil(
@@ -150,14 +155,14 @@ class _Generar extends State<Generar> {
       ],
     );
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
             image: AssetImage('assets/fondo.jpg'), fit: BoxFit.cover),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text("Generar"),
+          title: const Text("Generar"),
         ),
         drawer: Drawer(
           child: lista,
@@ -176,26 +181,43 @@ class _Generar extends State<Generar> {
         type: StepperType.horizontal,
         onStepContinue: () {
           setState(() {
+            bool _validarDoc = false;
             if (actualpaso < mispasos().length - 1) {
               print(empresa.text);
               switch (actualpaso) {
                 case 0:
-                  if (empresa.text != '') {
+                  if (tipo != '<Comprobante>') {
                     if (tipo == 'Factura') {
                       comprobante.serie = 'F001';
+                      if (documento.text.length == 11) {
+                        _validarDoc = true;
+                      }
                     } else {
                       comprobante.serie = 'B001';
+                      if (documento.text.length == 11 ||
+                          documento.text.length == 8) {
+                        _validarDoc = true;
+                      }
                     }
-                    comprobante.cliente.documento = documento.text;
-                    comprobante.cliente.direccion = direccion.text;
-                    comprobante.cliente.empresa = empresa.text;
-                    actualpaso++;
-                  } else {
-                    SnackBar snack = SnackBar(
+                    if (_validarDoc) {
+                      validar();
+                    } else {
+                      SnackBar snack = const SnackBar(
+                        content: Text('Error en el campo Documento'),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snack);
+                    }
+                  } else if (tipo == '<Comprobante>') {
+                    SnackBar snack = const SnackBar(
+                      content: Text('Seleccion el Comprobante'),
+                    );
+                    ScaffoldMessenger.of(context).showSnackBar(snack);
+                  } /*else {
+                    SnackBar snack = const SnackBar(
                       content: Text('Validar Documento'),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snack);
-                  }
+                  }*/
                   break;
                 case 1:
                   if (_tipomon[0] != 'Moneda') {
@@ -204,7 +226,7 @@ class _Generar extends State<Generar> {
                     comprobante.moneda = _tipomon[0];
                     actualpaso++;
                   } else {
-                    SnackBar snack = SnackBar(
+                    SnackBar snack = const SnackBar(
                       content: Text('Elegir tipo de Moneda'),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snack);
@@ -236,23 +258,32 @@ class _Generar extends State<Generar> {
                 if (actualpaso != mispasos().length - 1)
                   Expanded(
                     child: ElevatedButton(
-                      child: Text('Siguiente'),
+                      child: const Text('Siguiente'),
                       onPressed: details.onStepContinue,
                     ),
                   ),
                 if (actualpaso == mispasos().length - 1)
                   Expanded(
                     child: ElevatedButton(
-                      child: Text('Emitir'),
+                      child: const Text('Emitir'),
                       onPressed: () {
                         if (_productos.isNotEmpty) {
-                          Navigator.push(
+                          /*Navigator.push(
                               context,
                               MaterialPageRoute(
                                   builder: (context) =>
-                                      Emision(comprobante, _productos)));
+                                      Emision(comprobante, _productos)));*/
+                          Navigator.of(context).pushAndRemoveUntil(
+                              MaterialPageRoute(
+                                  builder: (BuildContext context) =>
+                                      Emision(comprobante, _productos)),
+                              (route) => false);
                         } else {
                           print("ingresar Producto");
+                          SnackBar snack = const SnackBar(
+                            content: Text('Ingresar Producto'),
+                          );
+                          ScaffoldMessenger.of(context).showSnackBar(snack);
                         }
 
                         //print(comprobante.productos[1].total);
@@ -261,13 +292,11 @@ class _Generar extends State<Generar> {
                       },
                     ),
                   ),
-                SizedBox(
-                  width: 10,
-                ),
+                const SizedBox(width: 10),
                 if (actualpaso != 0)
                   Expanded(
                     child: ElevatedButton(
-                      child: Text('Atras'),
+                      child: const Text('Atras'),
                       onPressed: details.onStepCancel,
                     ),
                   ),
@@ -300,40 +329,41 @@ class _Generar extends State<Generar> {
           },
           hint: Text(
             tipo,
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
             ),
           ),
         ),
         TextFormField(
+          keyboardType: TextInputType.number,
           controller: documento,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
               labelText: 'Documento Cliente',
               labelStyle: TextStyle(color: Colors.white)),
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
-        ElevatedButton(
+        /*ElevatedButton(
             child: Text("Validar"),
             onPressed: () {
               setState(() {
                 validar();
               });
-            }),
+            }),*/
         TextFormField(
           enabled: false, //para que no se modifique el text
           controller: direccion,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
               labelText: 'Direccion',
               labelStyle: TextStyle(color: Colors.white)),
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         TextFormField(
           enabled: false, //para que no se modifique el text
           controller: empresa,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
               labelText: 'Empresa', labelStyle: TextStyle(color: Colors.white)),
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         )
       ],
     );
@@ -345,17 +375,19 @@ class _Generar extends State<Generar> {
         TextFormField(
           enabled: false,
           controller: emision,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
               labelText: 'Fecha de Emision',
               labelStyle: TextStyle(color: Colors.white)),
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         TextFormField(
+          enabled: false,
+          keyboardType: TextInputType.datetime,
           controller: vencimiento,
-          decoration: InputDecoration(
+          decoration: const InputDecoration(
               labelText: 'Fecha de Vencimiento',
               labelStyle: TextStyle(color: Colors.white)),
-          style: TextStyle(color: Colors.white),
+          style: const TextStyle(color: Colors.white),
         ),
         DropdownButton(
           iconEnabledColor: Colors.white,
@@ -380,7 +412,7 @@ class _Generar extends State<Generar> {
           },
           hint: Text(
             _tipomon[0],
-            style: TextStyle(
+            style: const TextStyle(
               color: Colors.white,
               fontSize: 18,
             ),
@@ -393,16 +425,14 @@ class _Generar extends State<Generar> {
   Widget pag3() {
     return Column(
       children: [
-        Text(
+        const Text(
           "Productos",
           style: TextStyle(
             color: Colors.white,
             fontSize: 20,
           ),
         ),
-        SizedBox(
-          height: 10,
-        ),
+        const SizedBox(height: 10),
         Container(
           height: 40,
           alignment: Alignment.center,
@@ -414,7 +444,7 @@ class _Generar extends State<Generar> {
                 //adelante
                 alignment: Alignment.center,
                 width: 80,
-                child: Text(
+                child: const Text(
                   'Cantidad',
                   style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
@@ -422,7 +452,7 @@ class _Generar extends State<Generar> {
               Expanded(
                 child: Container(
                   alignment: Alignment.centerLeft,
-                  child: Text(
+                  child: const Text(
                     'Descripcion',
                     style: TextStyle(fontSize: 16, color: Colors.white),
                   ),
@@ -431,7 +461,7 @@ class _Generar extends State<Generar> {
               Container(
                 alignment: Alignment.centerLeft,
                 width: 90,
-                child: Text(
+                child: const Text(
                   "Total",
                   style: TextStyle(fontSize: 16, color: Colors.white),
                 ),
@@ -440,7 +470,7 @@ class _Generar extends State<Generar> {
           ),
         ),
         Container(
-          margin: EdgeInsets.symmetric(vertical: 10),
+          margin: const EdgeInsets.symmetric(vertical: 10),
           alignment: Alignment.center,
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(10)),
@@ -463,7 +493,7 @@ class _Generar extends State<Generar> {
                     }),
                   );
                 },
-                icon: Icon(Icons.add_circle),
+                icon: const Icon(Icons.add_circle),
               ),
             ),
           ],
@@ -484,7 +514,7 @@ class _Generar extends State<Generar> {
             onTap: () {
               AlertDialog alerta = AlertDialog(
                 title: Row(
-                  children: [
+                  children: const <Widget>[
                     Expanded(
                       child: Text("remover", textAlign: TextAlign.center),
                     ),
@@ -498,7 +528,7 @@ class _Generar extends State<Generar> {
                     Expanded(
                       child: IconButton(
                         color: Colors.red,
-                        icon: Icon(Icons.remove_circle),
+                        icon: const Icon(Icons.remove_circle),
                         onPressed: () {
                           DB.db.deleteProducto(prod.id).then((value) {
                             _loadProd();
@@ -510,7 +540,7 @@ class _Generar extends State<Generar> {
                     Expanded(
                       child: IconButton(
                         color: Colors.green,
-                        icon: Icon(Icons.change_circle),
+                        icon: const Icon(Icons.change_circle),
                         onPressed: () {
                           Navigator.push(
                               context,
@@ -549,7 +579,7 @@ class _Generar extends State<Generar> {
         },
       );
     } else {
-      return SizedBox(
+      return const SizedBox(
         height: 50,
         child: Align(
           alignment: Alignment.center,
@@ -557,16 +587,6 @@ class _Generar extends State<Generar> {
         ),
       );
     }
-  }
-
-  delete(borrar) {
-    DocumentReference documentReference = FirebaseFirestore.instance
-        .collection("temporal")
-        .doc(borrar.toString());
-    documentReference
-        .delete()
-        .then((value) => print("borrado id" + borrar.toString()))
-        .catchError((error) => print("Fallo: $error"));
   }
 
   validar() {
@@ -581,22 +601,27 @@ class _Generar extends State<Generar> {
             documentSnapshot.data() as Map<String, dynamic>;
         direccion.text = data['direccion'];
         empresa.text = data['empresa'];
-        error = '';
+        setState(() {
+          comprobante.cliente.documento = documento.text;
+          comprobante.cliente.direccion = direccion.text;
+          comprobante.cliente.empresa = empresa.text;
+          actualpaso = 1;
+        });
       } else {
         direccion.text = '';
         empresa.text = '';
         if (documento.text.length == 11) {
-          alerta = AlertDialog(
+          alerta = const AlertDialog(
             title: Text('Error'),
             content: Text('documento no registrado'),
           );
         } else if (documento.text.length == 8) {
-          alerta = AlertDialog(
+          alerta = const AlertDialog(
             title: Text('Error'),
             content: Text('Dni no registrado'),
           );
         } else {
-          alerta = AlertDialog(
+          alerta = const AlertDialog(
             title: Text('Error'),
             content: Text('Documento Invalido'),
           );

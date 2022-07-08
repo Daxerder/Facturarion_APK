@@ -45,7 +45,7 @@ class _Ingreso extends State<Ingreso> {
 
   Widget cuerpo() {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
             image: AssetImage('assets/fondo.jpg'), fit: BoxFit.cover),
       ),
@@ -60,7 +60,7 @@ class _Ingreso extends State<Ingreso> {
 
   Widget contenido() {
     return Container(
-      padding: EdgeInsets.symmetric(vertical: 10),
+      padding: const EdgeInsets.symmetric(vertical: 10),
       width: 350,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(10),
@@ -79,8 +79,8 @@ class _Ingreso extends State<Ingreso> {
 
   Widget titulo() {
     return Container(
-      padding: EdgeInsets.fromLTRB(0, 10, 0, 5),
-      child: Text(
+      padding: const EdgeInsets.fromLTRB(0, 10, 0, 5),
+      child: const Text(
         "INGRESAR",
         textAlign: TextAlign.center,
         style: TextStyle(
@@ -93,10 +93,12 @@ class _Ingreso extends State<Ingreso> {
 
   Widget usuario() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextField(
+        keyboardType: TextInputType.text,
+        maxLength: 8,
         controller: user,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           prefixIcon: Icon(Icons.person),
           hintText: "Usuario",
         ),
@@ -106,12 +108,14 @@ class _Ingreso extends State<Ingreso> {
 
   Widget contrasena() {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 10, vertical: 10),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: TextField(
+        keyboardType: TextInputType.text,
+        maxLength: 8,
         obscureText: true,
         obscuringCharacter: "*",
         controller: password,
-        decoration: InputDecoration(
+        decoration: const InputDecoration(
           prefixIcon: Icon(Icons.key),
           hintText: "Contraseña",
         ),
@@ -123,9 +127,9 @@ class _Ingreso extends State<Ingreso> {
     bool correcto = false;
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        minimumSize: Size(300, 10),
-        primary: Color.fromARGB(255, 26, 37, 55),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        minimumSize: const Size(300, 10),
+        primary: const Color.fromARGB(255, 26, 37, 55),
       ),
       onPressed: () {
         for (var index = 0; index < _usuarios.length; index++) {
@@ -149,7 +153,7 @@ class _Ingreso extends State<Ingreso> {
           password.clear();
         }
       },
-      child: Text("Inicar Sesion"),
+      child: const Text("Inicar Sesion"),
     );
   }
 }

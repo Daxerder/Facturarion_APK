@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:gofact/db/sqlite.dart';
+import 'package:gofact/models/pdf_api.dart';
+import 'package:gofact/pag_secundarias/downloads.dart';
 import 'package:gofact/pages/ingreso.dart';
+import 'package:open_file/open_file.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../models/clases.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -20,7 +22,6 @@ class _Emision extends State<Emision> {
   late WebViewController controller;
   FoB comp = FoB();
   List _productos = [];
-  List _prueba = [];
 
   @override
   void initState() {
@@ -62,6 +63,8 @@ class _Emision extends State<Emision> {
           .collection("boletas")
           .doc(comp.correlativo.toString());
     }
+    var arch = await PdfApi.generar(comp, this.widget.prod);
+    print("URL: ${arch.url}");
     documentReference
         .set(
           {
@@ -73,15 +76,22 @@ class _Emision extends State<Emision> {
             'direccion': comp.cliente.direccion,
             'f_emi': comp.f_emi,
             'f_venc': comp.f_venc,
+            //_productos map
             'productos': _productos,
             'moneda': comp.moneda,
+            'url': arch.url,
           },
           SetOptions(merge: false),
         )
         .catchError((error) => print("falla $error"))
-        .whenComplete(() {
+        .whenComplete(() async {
           DB.db.deleteAllProductos();
           print("exito");
+          Navigator.of(context).pushAndRemoveUntil(
+              MaterialPageRoute(
+                  builder: (BuildContext context) => DescargarPDF(arch.pdf)),
+              (route) => false);
+          //PdfApi.openFile(arch.pdf);
         });
   }
 
@@ -99,115 +109,36 @@ class _Emision extends State<Emision> {
     }
   }
 
-  String a = "asd";
-
-  final html = '''<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-</head>
-<body>
-    <h1>{1+5}</h1>
-</body>
-</html>''';
-
-  void loadLocalHtml() async {
-    final url = Uri.dataFromString(
-      html,
-      mimeType: 'text/html',
-      encoding: Encoding.getByName('utf-8'),
-    ).toString();
-
-    controller.loadUrl(url);
-  }
-
   @override
   Widget build(BuildContext context) {
-    ListView lista = ListView(
-      children: [
-        const DrawerHeader(
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-          ),
-          child: Center(
-            child: Text('Pacman 22'),
-          ),
-        ),
-        /*AboutListTile(
-          child: Text("facturacion"),
-          applicationIcon: Icon(Icons.favorite),
-          applicationVersion: "v 10.1",
-          applicationName: "Demo Drawer",
-          icon: Icon(Icons.info),
-        ),*/
-        ListTile(
-          leading: const Icon(Icons.home),
-          title: const Text("Inicio"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context).pushNamed("/inicio");
-            });
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.add),
-          title: Text("Generar"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context).pushNamed("/generar");
-            });
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.book),
-          title: Text("Reporte"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context).pushNamed("/reporte");
-            });
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.app_registration),
-          title: Text("Registrar"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context).pushNamed("/registrar");
-            });
-          },
-        ),
-        ListTile(
-          leading: Icon(Icons.exit_to_app),
-          title: Text("Cerrar Sesion"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => Ingreso()),
-                  (route) => false);
-            });
-          },
-        ),
-      ],
-    );
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
             image: AssetImage('assets/fondo.jpg'), fit: BoxFit.cover),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text("Generar"),
-        ),
-        drawer: Drawer(
-          child: lista,
+          title: const Text("Generar Documento"),
         ),
         body: Center(
           child: Container(
+            height: 200,
+            width: 200,
+            child: Card(
+              color: Colors.white,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: const <Widget>[
+                  CircularProgressIndicator(),
+                  SizedBox(height: 50.0),
+                  Text("Emitiendo Documento"),
+                ],
+              ),
+            ),
+          ),
+        ),
+        /*Container(
             height: 250,
             decoration: BoxDecoration(
               color: Colors.white,
@@ -222,7 +153,7 @@ class _Emision extends State<Emision> {
                     children: [
                       Container(
                         height: 150,
-                        child: Icon(
+                        child: const Icon(
                           Icons.check_circle,
                           color: Colors.green,
                           size: 100,
@@ -231,7 +162,7 @@ class _Emision extends State<Emision> {
                       Container(
                         alignment: Alignment.center,
                         //height: 50,
-                        child: Text(
+                        child: const Text(
                           "Emitido con Exito",
                           textAlign: TextAlign.center,
                         ),
@@ -241,63 +172,13 @@ class _Emision extends State<Emision> {
                 ),
                 ElevatedButton(
                     onPressed: () {
-                      Navigator.of(context).pushNamed("/inicio");
+                      Navigator.of(context)
+                          .pushNamedAndRemoveUntil("/inicio", (route) => false);
                     },
-                    child: Text("INICIO"))
+                    child: const Text("INICIO"))
               ],
             ),
-          ),
-        ), /*WebView(
-          javascriptMode: JavascriptMode.unrestricted,
-          //initialUrl: 'https://www.netflix.com/',
-          onWebViewCreated: (controller) {
-            this.controller = controller;
-            loadLocalHtml();
-          },
-        ),*/
-
-        /*Center(
-          child: Container(
-            height: 250,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 200,
-                  width: 200,
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 150,
-                        child: Icon(
-                          Icons.check_circle,
-                          color: Colors.green,
-                          size: 100,
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        //height: 50,
-                        child: Text(
-                          "Emitido con Exito",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context).pushNamed("/inicio");
-                    },
-                    child: Text("INICIO"))
-              ],
-            ),
-          ),
-        ),*/
+          ),*/
       ),
     );
   }

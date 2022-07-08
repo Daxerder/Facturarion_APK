@@ -60,7 +60,7 @@ class _Reporte extends State<Reporte> {
   List<double> total = [];
 
   //filtros
-  var _listtipo = ['Facturas', 'Boletas', 'Vacio', 'Facturas y Boletas'];
+  var _listtipo = ['Facturas', 'Boletas', 'Facturas y Boletas'];
   var _listmoneda = ['Soles', 'Dolares', 'Vacio'];
   var parametros = ['', '']; //faltaria añadir fecha, cliente tal vez
   List tipo_mon = []; //Simbolo de soles dolares
@@ -81,7 +81,7 @@ class _Reporte extends State<Reporte> {
             color: Colors.transparent,
           ),
           child: Center(
-            child: Text('Pacman 22'),
+            child: Text('Facturacion Electronica'),
           ),
         ),
         /*AboutListTile(
@@ -96,40 +96,44 @@ class _Reporte extends State<Reporte> {
           title: const Text("Inicio"),
           onTap: () {
             setState(() {
-              Navigator.of(context).pushNamed("/inicio");
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/inicio", (route) => false);
             });
           },
         ),
         ListTile(
-          leading: Icon(Icons.add),
-          title: Text("Generar"),
+          leading: const Icon(Icons.add),
+          title: const Text("Generar"),
           onTap: () {
             setState(() {
-              Navigator.of(context).pushNamed("/generar");
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/generar", (route) => false);
             });
           },
         ),
         ListTile(
-          leading: Icon(Icons.book),
-          title: Text("Reporte"),
+          leading: const Icon(Icons.book),
+          title: const Text("Reporte"),
           onTap: () {
             setState(() {
-              Navigator.of(context).pushNamed("/reporte");
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/reporte", (route) => false);
             });
           },
         ),
         ListTile(
-          leading: Icon(Icons.app_registration),
-          title: Text("Registrar"),
+          leading: const Icon(Icons.app_registration),
+          title: const Text("Registrar Empresa"),
           onTap: () {
             setState(() {
-              Navigator.of(context).pushNamed("/registrar");
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/registrar", (route) => false);
             });
           },
         ),
         ListTile(
-          leading: Icon(Icons.exit_to_app),
-          title: Text("Cerrar Sesion"),
+          leading: const Icon(Icons.exit_to_app),
+          title: const Text("Cerrar Sesion"),
           onTap: () {
             setState(() {
               Navigator.of(context).pushAndRemoveUntil(
@@ -142,14 +146,14 @@ class _Reporte extends State<Reporte> {
       ],
     );
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
             image: AssetImage('assets/fondo.jpg'), fit: BoxFit.cover),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text("Reportes"),
+          title: const Text("Reportes"),
         ),
         drawer: Drawer(
           child: lista,
@@ -159,7 +163,7 @@ class _Reporte extends State<Reporte> {
             tipo(),
             Text(
               error,
-              style: TextStyle(color: Colors.red, fontSize: 20),
+              style: const TextStyle(color: Colors.red, fontSize: 20),
             ),
             moneda(),
             Row(
@@ -187,8 +191,8 @@ class _Reporte extends State<Reporte> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.fromLTRB(0, 15, 0, 0),
-          child: Text(
+          padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
+          child: const Text(
             "Tipo de Documentos",
             style: TextStyle(color: Colors.white, fontSize: 20),
             textAlign: TextAlign.left,
@@ -196,7 +200,7 @@ class _Reporte extends State<Reporte> {
         ),
         Container(
           width: 300,
-          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
           child: DropdownButton(
             isExpanded: true,
             items: _listtipo.map((String a) {
@@ -215,7 +219,7 @@ class _Reporte extends State<Reporte> {
             },
             hint: Text(
               _tipo,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 20,
               ),
@@ -230,14 +234,14 @@ class _Reporte extends State<Reporte> {
     return Column(
       children: [
         Container(
-          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-          child: Text(
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+          child: const Text(
             "Tipo de Moneda",
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(0, 20, 0, 0),
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
           width: 300,
           child: DropdownButton(
             isExpanded: true, //para que ocupe todo el contenedor
@@ -257,7 +261,7 @@ class _Reporte extends State<Reporte> {
             },
             hint: Text(
               _moneda,
-              style: TextStyle(
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 20,
               ),
@@ -271,9 +275,9 @@ class _Reporte extends State<Reporte> {
   Widget boton() {
     return ElevatedButton(
       style: ElevatedButton.styleFrom(
-        padding: EdgeInsets.symmetric(vertical: 10),
-        minimumSize: Size(300, 10),
-        primary: Color.fromARGB(255, 26, 37, 55),
+        padding: const EdgeInsets.symmetric(vertical: 10),
+        minimumSize: const Size(300, 10),
+        primary: const Color.fromARGB(255, 26, 37, 55),
       ),
       onPressed: () {
         gender = '';
@@ -302,20 +306,20 @@ class _Reporte extends State<Reporte> {
           }
         });
       },
-      child: Text("Generar Reporte"),
+      child: const Text("Generar Reporte"),
     );
   }
 
   Widget Visualizacion() {
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
             image: AssetImage('assets/fondo.jpg'), fit: BoxFit.cover),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text("Visualizacion"),
+          title: const Text("Visualizacion"),
         ),
         body: ListView.builder(
             itemCount: mostrar.length,
@@ -323,7 +327,7 @@ class _Reporte extends State<Reporte> {
               print("mostrar");
               print(mostrar.length);
               return Container(
-                margin: EdgeInsets.symmetric(vertical: 10),
+                margin: const EdgeInsets.symmetric(vertical: 10),
                 alignment: Alignment.center,
                 decoration: BoxDecoration(
                     color: Colors.white,

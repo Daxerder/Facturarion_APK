@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gofact/db/sqlite.dart';
 import 'package:gofact/models/clases.dart';
+import 'package:gofact/models/pdf_api.dart';
 import 'package:gofact/pages/emision.dart';
 import 'ingreso.dart';
 
@@ -25,7 +26,7 @@ class _Inicio extends State<Inicio> {
             color: Colors.transparent,
           ),
           child: Center(
-            child: Text('Pacman 22'),
+            child: Text('Facturacion Electronica'),
           ),
         ),
         /*AboutListTile(
@@ -40,44 +41,48 @@ class _Inicio extends State<Inicio> {
           title: const Text("Inicio"),
           onTap: () {
             setState(() {
-              Navigator.of(context).pushNamed("/inicio");
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/inicio", (route) => false);
             });
           },
         ),
         ListTile(
-          leading: Icon(Icons.add),
-          title: Text("Generar"),
+          leading: const Icon(Icons.add),
+          title: const Text("Generar"),
           onTap: () {
             setState(() {
-              Navigator.of(context).pushNamed("/generar");
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/generar", (route) => false);
             });
           },
         ),
         ListTile(
-          leading: Icon(Icons.book),
-          title: Text("Reporte"),
+          leading: const Icon(Icons.book),
+          title: const Text("Reporte"),
           onTap: () {
             setState(() {
-              Navigator.of(context).pushNamed("/reporte");
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/reporte", (route) => false);
             });
           },
         ),
         ListTile(
-          leading: Icon(Icons.app_registration),
-          title: Text("Registrar"),
+          leading: const Icon(Icons.app_registration),
+          title: const Text("Registrar Empresa"),
           onTap: () {
             setState(() {
-              Navigator.of(context).pushNamed("/registrar");
+              Navigator.of(context)
+                  .pushNamedAndRemoveUntil("/registrar", (route) => false);
             });
           },
         ),
         ListTile(
-          leading: Icon(Icons.exit_to_app),
-          title: Text("Cerrar Sesion"),
+          leading: const Icon(Icons.exit_to_app),
+          title: const Text("Cerrar Sesion"),
           onTap: () {
             setState(() {
               Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute<Null>(
+                  MaterialPageRoute(
                       builder: (BuildContext context) => Ingreso()),
                   (route) => false);
             });
@@ -86,24 +91,18 @@ class _Inicio extends State<Inicio> {
       ],
     );
     return Container(
-      decoration: BoxDecoration(
+      decoration: const BoxDecoration(
         image: DecorationImage(
             image: AssetImage('assets/fondo.jpg'), fit: BoxFit.cover),
       ),
       child: Scaffold(
         backgroundColor: Colors.transparent,
         appBar: AppBar(
-          title: Text("Inicio"),
+          title: const Text("Inicio"),
         ),
         drawer: Drawer(
           child: lista,
         ),
-        /*body: FloatingActionButton(onPressed: () {
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) => Emision(comprobante, _productos)));
-        }),*/
       ),
     );
   }

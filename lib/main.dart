@@ -2,9 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:gofact/pages/generar.dart';
 import 'package:gofact/pages/ingreso.dart';
 import 'package:gofact/pages/inicio.dart';
-import 'package:gofact/pages/reg_empresa.dart';
+import 'package:gofact/pages/empresas.dart';
 import 'package:gofact/pages/reporte.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:gofact/providers/list_prod.dart';
 import 'package:provider/provider.dart';
@@ -35,7 +34,7 @@ class MyApp extends StatelessWidget {
           Inicio.ruta: (BuildContext context) => Inicio(),
           Reporte.ruta: (BuildContext context) => Reporte(),
           Generar.ruta: (BuildContext context) => Generar(),
-          Registrar.ruta: (BuildContext context) => Registrar(),
+          Empresas.ruta: (BuildContext context) => Empresas(),
         },
         initialRoute: "/ingreso",
       ),
