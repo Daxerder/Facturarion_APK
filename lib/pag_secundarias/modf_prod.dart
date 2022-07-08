@@ -57,7 +57,7 @@ class _Modf_Producto extends State<Modf_Producto> {
               TextFormField(
                 keyboardType: TextInputType.number,
                 decoration: const InputDecoration(
-                    labelText: 'Precio',
+                    labelText: 'Precio Unitario',
                     labelStyle: TextStyle(color: Colors.white)),
                 style: const TextStyle(color: Colors.white),
                 controller: _precio,

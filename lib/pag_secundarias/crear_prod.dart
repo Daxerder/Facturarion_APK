@@ -62,7 +62,7 @@ class _Crear_Producto extends State<Crear_Producto> {
                   keyboardType: TextInputType.number,
                   maxLength: 6,
                   decoration: const InputDecoration(
-                      labelText: 'Precio',
+                      labelText: 'Precio Unitario',
                       labelStyle: TextStyle(color: Colors.white)),
                   style: const TextStyle(color: Colors.white),
                   controller: _precio,
