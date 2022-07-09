@@ -35,74 +35,79 @@ class _Modf_Producto extends State<Modf_Producto> {
         appBar: AppBar(
           title: const Text("Modificar Producto"),
         ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
-          child: Column(
-            children: [
-              TextFormField(
-                decoration: const InputDecoration(
-                    labelText: 'Producto',
-                    labelStyle: TextStyle(color: Colors.white)),
-                style: const TextStyle(color: Colors.white),
-                controller: _producto,
-              ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                    labelText: 'Cantidad',
-                    labelStyle: TextStyle(color: Colors.white)),
-                style: const TextStyle(color: Colors.white),
-                controller: _cantidad,
-              ),
-              TextFormField(
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(
-                    labelText: 'Precio Unitario',
-                    labelStyle: TextStyle(color: Colors.white)),
-                style: const TextStyle(color: Colors.white),
-                controller: _precio,
-              ),
-              TextButton(
-                child: const Text(
-                  "Registrar Compra",
-                  style: TextStyle(color: Colors.white),
+        body: SingleChildScrollView(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 10, horizontal: 10),
+            child: Column(
+              children: [
+                TextFormField(
+                  maxLength: 20,
+                  decoration: const InputDecoration(
+                      labelText: 'Producto',
+                      labelStyle: TextStyle(color: Colors.white)),
+                  style: const TextStyle(color: Colors.white),
+                  controller: _producto,
                 ),
-                style: TextButton.styleFrom(backgroundColor: Colors.blue),
-                onPressed: () {
-                  if (_producto.text != '' &&
-                      _cantidad.text != '' &&
-                      _precio.text != '') {
-                    if (!validar_text(_producto.text)) {
-                      SnackBar snack = const SnackBar(
-                        content: Text('Error en campo Producto'),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snack);
-                    } else if (!validar_cant(_cantidad.text)) {
-                      SnackBar snack = const SnackBar(
-                        content: Text('Error en campo Cantidad'),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snack);
-                    } else if (!validar_precio(_precio.text)) {
-                      SnackBar snack = const SnackBar(
-                        content: Text('Error en campo Precio'),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snack);
+                TextFormField(
+                  maxLength: 3,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                      labelText: 'Cantidad',
+                      labelStyle: TextStyle(color: Colors.white)),
+                  style: const TextStyle(color: Colors.white),
+                  controller: _cantidad,
+                ),
+                TextFormField(
+                  maxLength: 4,
+                  keyboardType: TextInputType.number,
+                  decoration: const InputDecoration(
+                      labelText: 'Precio Unitario',
+                      labelStyle: TextStyle(color: Colors.white)),
+                  style: const TextStyle(color: Colors.white),
+                  controller: _precio,
+                ),
+                TextButton(
+                  child: const Text(
+                    "Registrar Compra",
+                    style: TextStyle(color: Colors.white),
+                  ),
+                  style: TextButton.styleFrom(backgroundColor: Colors.blue),
+                  onPressed: () {
+                    if (_producto.text != '' &&
+                        _cantidad.text != '' &&
+                        _precio.text != '') {
+                      if (!validar_text(_producto.text)) {
+                        SnackBar snack = const SnackBar(
+                          content: Text('Error en campo Producto'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snack);
+                      } else if (!validar_cant(_cantidad.text)) {
+                        SnackBar snack = const SnackBar(
+                          content: Text('Error en campo Cantidad'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snack);
+                      } else if (!validar_precio(_precio.text)) {
+                        SnackBar snack = const SnackBar(
+                          content: Text('Error en campo Precio'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snack);
+                      } else {
+                        _lista.descripcion = _producto.text;
+                        _lista.cantidad = double.parse(_cantidad.text);
+                        _lista.total = double.parse(_precio.text);
+                        DB.db.updateProducto(_lista, _lista.id);
+                        Navigator.of(context).pop();
+                      }
                     } else {
-                      _lista.descripcion = _producto.text;
-                      _lista.cantidad = double.parse(_cantidad.text);
-                      _lista.total = double.parse(_precio.text);
-                      DB.db.updateProducto(_lista, _lista.id);
-                      Navigator.of(context).pop();
+                      SnackBar snack = const SnackBar(
+                        content: Text('Rellenar todos los campos'),
+                      );
+                      ScaffoldMessenger.of(context).showSnackBar(snack);
                     }
-                  } else {
-                    SnackBar snack = const SnackBar(
-                      content: Text('Rellenar todos los campos'),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snack);
-                  }
-                },
-              ),
-            ],
+                  },
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -139,8 +144,12 @@ class _Modf_Producto extends State<Modf_Producto> {
 
   bool validar_cant(String texto) {
     String palabra = texto;
+    palabra = palabra.trim();
+    setState(() {
+      _cantidad.text = palabra;
+    });
     for (var i = 0; i < palabra.length; i++) {
-      if (!texto[i].contains(RegExp(r"[0-9]"))) {
+      if (!palabra[i].contains(RegExp(r"[0-9]"))) {
         return false;
       }
     }
@@ -149,12 +158,24 @@ class _Modf_Producto extends State<Modf_Producto> {
 
   bool validar_precio(String texto) {
     var pos;
+    bool punto = false;
     String palabra = texto;
+    palabra = palabra.trim();
+    setState(() {
+      _precio.text = palabra;
+    });
     for (var i = 0; i < palabra.length; i++) {
-      if (texto[i] == '.') {
-        pos = i;
+      if (palabra[i] == '.') {
+        if (palabra[i] == '.') {
+          if (!punto) {
+            pos = i;
+            punto = true;
+          } else {
+            return false;
+          }
+        }
       }
-      if (!texto[i].contains(RegExp(r"[0-9.]"))) {
+      if (!palabra[i].contains(RegExp(r"[0-9.]"))) {
         return false;
       }
     }

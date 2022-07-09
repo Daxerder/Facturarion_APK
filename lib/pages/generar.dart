@@ -309,63 +309,66 @@ class _Generar extends State<Generar> {
   }
 
   Widget pag1() {
-    return Column(
-      children: <Widget>[
-        DropdownButton(
-          //borderRadius: BorderRadius.circular(20),
-          iconEnabledColor: Colors.white,
-          dropdownColor: Colors.white,
-          isExpanded: true,
-          items: _listtipo.map((String a) {
-            return DropdownMenuItem(
-              value: a,
-              child: Text(a),
-            );
-          }).toList(),
-          onChanged: (_value) => {
-            setState(() {
-              tipo = _value.toString();
-            }),
-          },
-          hint: Text(
-            tipo,
-            style: const TextStyle(
-              color: Colors.white,
-              fontSize: 18,
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          DropdownButton(
+            //borderRadius: BorderRadius.circular(20),
+            iconEnabledColor: Colors.white,
+            dropdownColor: Colors.white,
+            isExpanded: true,
+            items: _listtipo.map((String a) {
+              return DropdownMenuItem(
+                value: a,
+                child: Text(a),
+              );
+            }).toList(),
+            onChanged: (_value) => {
+              setState(() {
+                tipo = _value.toString();
+              }),
+            },
+            hint: Text(
+              tipo,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+              ),
             ),
           ),
-        ),
-        TextFormField(
-          keyboardType: TextInputType.number,
-          controller: documento,
-          decoration: const InputDecoration(
-              labelText: 'Documento Cliente',
-              labelStyle: TextStyle(color: Colors.white)),
-          style: const TextStyle(color: Colors.white),
-        ),
-        /*ElevatedButton(
+          TextFormField(
+            keyboardType: TextInputType.number,
+            controller: documento,
+            decoration: const InputDecoration(
+                labelText: 'Documento Cliente',
+                labelStyle: TextStyle(color: Colors.white)),
+            style: const TextStyle(color: Colors.white),
+          ),
+          /*ElevatedButton(
             child: Text("Validar"),
             onPressed: () {
               setState(() {
                 validar();
               });
             }),*/
-        TextFormField(
-          enabled: false, //para que no se modifique el text
-          controller: direccion,
-          decoration: const InputDecoration(
-              labelText: 'Direccion',
-              labelStyle: TextStyle(color: Colors.white)),
-          style: const TextStyle(color: Colors.white),
-        ),
-        TextFormField(
-          enabled: false, //para que no se modifique el text
-          controller: empresa,
-          decoration: const InputDecoration(
-              labelText: 'Empresa', labelStyle: TextStyle(color: Colors.white)),
-          style: const TextStyle(color: Colors.white),
-        )
-      ],
+          TextFormField(
+            enabled: false, //para que no se modifique el text
+            controller: direccion,
+            decoration: const InputDecoration(
+                labelText: 'Direccion',
+                labelStyle: TextStyle(color: Colors.white)),
+            style: const TextStyle(color: Colors.white),
+          ),
+          TextFormField(
+            enabled: false, //para que no se modifique el text
+            controller: empresa,
+            decoration: const InputDecoration(
+                labelText: 'Empresa',
+                labelStyle: TextStyle(color: Colors.white)),
+            style: const TextStyle(color: Colors.white),
+          )
+        ],
+      ),
     );
   }
 

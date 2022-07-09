@@ -64,132 +64,138 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
   }
 
   Widget cuerpo() {
-    return Column(
-      children: <Widget>[
-        TextFormField(
-          controller: _documento,
-          keyboardType: TextInputType.number,
-          maxLength: 11,
-          decoration: const InputDecoration(
-              labelText: 'Ruc/Dni', labelStyle: TextStyle(color: Colors.white)),
-          style: const TextStyle(color: Colors.white),
-          onChanged: (String documento) {
-            getDocumento(documento);
-          },
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        TextFormField(
-          controller: _empresa,
-          decoration: const InputDecoration(
-              labelText: 'Empresa', labelStyle: TextStyle(color: Colors.white)),
-          style: const TextStyle(color: Colors.white),
-          onChanged: (String empresa) {
-            getEmpresa(empresa);
-          },
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        TextFormField(
-          controller: _direccion,
-          decoration: const InputDecoration(
-              labelText: 'Direccion',
-              labelStyle: TextStyle(color: Colors.white)),
-          style: const TextStyle(color: Colors.white),
-          onChanged: (String direccion) {
-            getDireccion(direccion);
-          },
-        ),
-        const SizedBox(
-          height: 20,
-        ),
-        Row(
-          children: [
-            Expanded(
-              child: ElevatedButton(
-                child: const Text("Registrar"),
-                onPressed: () async {
-                  if (Documento != '' && Direccion != '' && Empresa != '') {
-                    var doc = Documento[0] + Documento[1];
-                    if (Documento.length != 11 && Documento.length != 8) {
-                      SnackBar snack = const SnackBar(
-                        content: Text('Error en el Ruc/Dni'),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snack);
-                    } else if (Documento.length == 11 &&
-                        (doc != '10' && doc != '15' && doc != '20')) {
-                      SnackBar snack = const SnackBar(
-                        content: Text('Error en el Ruc/Dni'),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snack);
-                    } else if (!validar_doc(Documento)) {
-                      SnackBar snack = const SnackBar(
-                        content: Text('Error en el Ruc/Dni'),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snack);
-                    } else if (!validar_text(Empresa)) {
-                      SnackBar snack = const SnackBar(
-                        content: Text('Error en el campo Empresa'),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snack);
-                    } else if (!validar_text(Direccion)) {
-                      SnackBar snack = const SnackBar(
-                        content: Text('Error en el campo Direccion'),
-                      );
-                      ScaffoldMessenger.of(context).showSnackBar(snack);
-                    } else {
-                      Direccion = quitar_espacios(Direccion);
-                      Empresa = quitar_espacios(Empresa);
-                      List _empresas = await getEmpresas();
-                      /*for(var i = 0; i < _empresas.length;i++){}*/
-                      print(_empresas);
-                      for (var i = 0; i < _empresas.length; i++) {
-                        if (_empresas[i]["documento"] == Documento) {
-                          AlertDialog alerta = const AlertDialog(
-                            title: Text("Empresa ya registrada"),
-                          );
-                          limpiar();
-                          return showDialog(
-                              context: context,
-                              builder: (BuildContext context) => alerta);
+    return SingleChildScrollView(
+      child: Column(
+        children: <Widget>[
+          TextFormField(
+            controller: _documento,
+            keyboardType: TextInputType.number,
+            maxLength: 11,
+            decoration: const InputDecoration(
+                labelText: 'Ruc/Dni',
+                labelStyle: TextStyle(color: Colors.white)),
+            style: const TextStyle(color: Colors.white),
+            onChanged: (String documento) {
+              getDocumento(documento);
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          TextFormField(
+            controller: _empresa,
+            maxLength: 20,
+            decoration: const InputDecoration(
+                labelText: 'Empresa',
+                labelStyle: TextStyle(color: Colors.white)),
+            style: const TextStyle(color: Colors.white),
+            onChanged: (String empresa) {
+              getEmpresa(empresa);
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          TextFormField(
+            controller: _direccion,
+            maxLength: 20,
+            decoration: const InputDecoration(
+                labelText: 'Direccion',
+                labelStyle: TextStyle(color: Colors.white)),
+            style: const TextStyle(color: Colors.white),
+            onChanged: (String direccion) {
+              getDireccion(direccion);
+            },
+          ),
+          const SizedBox(
+            height: 20,
+          ),
+          Row(
+            children: [
+              Expanded(
+                child: ElevatedButton(
+                  child: const Text("Registrar"),
+                  onPressed: () async {
+                    if (Documento != '' && Direccion != '' && Empresa != '') {
+                      var doc = Documento[0] + Documento[1];
+                      if (Documento.length != 11 && Documento.length != 8) {
+                        SnackBar snack = const SnackBar(
+                          content: Text('Error en el Ruc/Dni'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snack);
+                      } else if (Documento.length == 11 &&
+                          (doc != '10' && doc != '15' && doc != '20')) {
+                        SnackBar snack = const SnackBar(
+                          content: Text('Error en el Ruc/Dni'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snack);
+                      } else if (!validar_doc(Documento)) {
+                        SnackBar snack = const SnackBar(
+                          content: Text('Error en el Ruc/Dni'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snack);
+                      } else if (!validar_text(Empresa)) {
+                        SnackBar snack = const SnackBar(
+                          content: Text('Error en el campo Empresa'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snack);
+                      } else if (!validar_text(Direccion)) {
+                        SnackBar snack = const SnackBar(
+                          content: Text('Error en el campo Direccion'),
+                        );
+                        ScaffoldMessenger.of(context).showSnackBar(snack);
+                      } else {
+                        Direccion = quitar_espacios(Direccion);
+                        Empresa = quitar_espacios(Empresa);
+                        List _empresas = await getEmpresas();
+                        /*for(var i = 0; i < _empresas.length;i++){}*/
+                        print(_empresas);
+                        for (var i = 0; i < _empresas.length; i++) {
+                          if (_empresas[i]["documento"] == Documento) {
+                            AlertDialog alerta = const AlertDialog(
+                              title: Text("Empresa ya registrada"),
+                            );
+                            limpiar();
+                            return showDialog(
+                                context: context,
+                                builder: (BuildContext context) => alerta);
+                          }
                         }
+                        registrar();
+                        AlertDialog alerta = AlertDialog(
+                          title: const Icon(Icons.check),
+                          content:
+                              Text('Empresa $Documento registrada con exito'),
+                        );
+                        Navigator.of(context).pop();
+                        showDialog(
+                            context: context,
+                            builder: (BuildContext context) => alerta);
                       }
-                      registrar();
-                      AlertDialog alerta = AlertDialog(
-                        title: const Icon(Icons.check),
-                        content:
-                            Text('Empresa $Documento registrada con exito'),
+                    } else {
+                      SnackBar snack = const SnackBar(
+                        content: Text('Rellenar todos los campos'),
                       );
-                      Navigator.of(context).pop();
-                      showDialog(
-                          context: context,
-                          builder: (BuildContext context) => alerta);
+                      ScaffoldMessenger.of(context).showSnackBar(snack);
                     }
-                  } else {
-                    SnackBar snack = const SnackBar(
-                      content: Text('Rellenar todos los campos'),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snack);
-                  }
-                },
+                  },
+                ),
               ),
-            ),
-            const SizedBox(
-              width: 20,
-            ),
-            Expanded(
-              child: ElevatedButton(
-                child: const Text("Limpiar"),
-                onPressed: () {
-                  limpiar();
-                },
+              const SizedBox(
+                width: 20,
               ),
-            )
-          ],
-        )
-      ],
+              Expanded(
+                child: ElevatedButton(
+                  child: const Text("Limpiar"),
+                  onPressed: () {
+                    limpiar();
+                  },
+                ),
+              )
+            ],
+          )
+        ],
+      ),
     );
   }
 

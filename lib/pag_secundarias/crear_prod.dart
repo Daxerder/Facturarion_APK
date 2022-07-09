@@ -60,7 +60,7 @@ class _Crear_Producto extends State<Crear_Producto> {
                 TextFormField(
                   autofocus: true,
                   keyboardType: TextInputType.number,
-                  maxLength: 6,
+                  maxLength: 4,
                   decoration: const InputDecoration(
                       labelText: 'Precio Unitario',
                       labelStyle: TextStyle(color: Colors.white)),
@@ -161,6 +161,10 @@ class _Crear_Producto extends State<Crear_Producto> {
 
   bool validar_cant(String texto) {
     String palabra = texto;
+    palabra = palabra.trim();
+    setState(() {
+      _cantidad.text = palabra;
+    });
     for (var i = 0; i < palabra.length; i++) {
       if (!texto[i].contains(RegExp(r"[0-9]"))) {
         return false;
@@ -174,6 +178,10 @@ class _Crear_Producto extends State<Crear_Producto> {
     var pos;
     bool punto = false;
     String palabra = texto;
+    palabra = palabra.trim();
+    setState(() {
+      _precio.text = palabra;
+    });
     for (var i = 0; i < palabra.length; i++) {
       if (texto[i] == '.') {
         if (!punto) {
