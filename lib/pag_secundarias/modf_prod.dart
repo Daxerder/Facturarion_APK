@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gofact/db/sqlite.dart';
 import 'package:gofact/models/clases.dart';
 
@@ -42,14 +43,25 @@ class _Modf_Producto extends State<Modf_Producto> {
               children: [
                 TextFormField(
                   maxLength: 20,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9 .]")),
+                  ],
                   decoration: const InputDecoration(
                       labelText: 'Producto',
                       labelStyle: TextStyle(color: Colors.white)),
                   style: const TextStyle(color: Colors.white),
                   controller: _producto,
+                  onChanged: (value) {
+                    _producto.value = TextEditingValue(
+                        text: value.toUpperCase(),
+                        selection: _producto.selection);
+                  },
                 ),
                 TextFormField(
                   maxLength: 3,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                  ],
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                       labelText: 'Cantidad',
@@ -59,6 +71,9 @@ class _Modf_Producto extends State<Modf_Producto> {
                 ),
                 TextFormField(
                   maxLength: 4,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
+                  ],
                   keyboardType: TextInputType.number,
                   decoration: const InputDecoration(
                       labelText: 'Precio Unitario',
@@ -79,11 +94,6 @@ class _Modf_Producto extends State<Modf_Producto> {
                       if (!validar_text(_producto.text)) {
                         SnackBar snack = const SnackBar(
                           content: Text('Error en campo Producto'),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snack);
-                      } else if (!validar_cant(_cantidad.text)) {
-                        SnackBar snack = const SnackBar(
-                          content: Text('Error en campo Cantidad'),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snack);
                       } else if (!validar_precio(_precio.text)) {
@@ -119,11 +129,6 @@ class _Modf_Producto extends State<Modf_Producto> {
     String nueva = '';
     palabra = palabra.trim();
     for (var i = 0; i < palabra.length; i++) {
-      if (!texto[i].contains(RegExp(r"[a-záéíóúüñA-ZÑ1-9 ]"))) {
-        return false;
-      }
-    }
-    for (var i = 0; i < palabra.length; i++) {
       if (palabra[i] != ' ') {
         nueva = nueva + palabra[i];
         //si la sig posicion es menor a la long total de la palabra te aumenta 1
@@ -135,24 +140,9 @@ class _Modf_Producto extends State<Modf_Producto> {
         }
       }
     }
-
     setState(() {
       _producto.text = nueva;
     });
-    return true;
-  }
-
-  bool validar_cant(String texto) {
-    String palabra = texto;
-    palabra = palabra.trim();
-    setState(() {
-      _cantidad.text = palabra;
-    });
-    for (var i = 0; i < palabra.length; i++) {
-      if (!palabra[i].contains(RegExp(r"[0-9]"))) {
-        return false;
-      }
-    }
     return true;
   }
 
@@ -174,9 +164,6 @@ class _Modf_Producto extends State<Modf_Producto> {
             return false;
           }
         }
-      }
-      if (!palabra[i].contains(RegExp(r"[0-9.]"))) {
-        return false;
       }
     }
     if (pos == 0) {

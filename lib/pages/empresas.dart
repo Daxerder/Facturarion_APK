@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:gofact/funciones/list_view.dart';
+import 'package:gofact/models/clases.dart';
+import 'package:gofact/pag_secundarias/modf_empresa.dart';
 import 'package:gofact/pag_secundarias/reg_empresa.dart';
 import 'ingreso.dart';
 
@@ -12,77 +15,6 @@ class Empresas extends StatefulWidget {
 class _Empresas extends State<Empresas> {
   @override
   Widget build(BuildContext context) {
-    ListView lista = ListView(
-      children: [
-        const DrawerHeader(
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-          ),
-          child: Center(
-            child: Text('Facturacion Electronica'),
-          ),
-        ),
-        /*AboutListTile(
-          child: Text("facturacion"),
-          applicationIcon: Icon(Icons.favorite),
-          applicationVersion: "v 10.1",
-          applicationName: "Demo Drawer",
-          icon: Icon(Icons.info),
-        ),*/
-        ListTile(
-          leading: const Icon(Icons.home),
-          title: const Text("Inicio"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil("/inicio", (route) => false);
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.add),
-          title: const Text("Generar"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil("/generar", (route) => false);
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.book),
-          title: const Text("Reporte"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil("/reporte", (route) => false);
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.app_registration),
-          title: const Text("Registrar Empresa"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil("/registrar", (route) => false);
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.exit_to_app),
-          title: const Text("Cerrar Sesion"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => Ingreso()),
-                  (route) => false);
-            });
-          },
-        ),
-      ],
-    );
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -105,7 +37,7 @@ class _Empresas extends State<Empresas> {
           ],
         ),
         drawer: Drawer(
-          child: lista,
+          child: list_view(context),
         ),
         body: Container(
           child: Padding(
@@ -151,13 +83,19 @@ class _Empresas extends State<Empresas> {
                             },
                           ),
                         ),
-                        /*Expanded(
+                        Expanded(
                           child: IconButton(
-                            color: Colors.green,
-                            icon: const Icon(Icons.change_circle),
-                            onPressed: () {},
-                          ),
-                        ),*/
+                              color: Colors.green,
+                              icon: const Icon(Icons.change_circle),
+                              onPressed: () {
+                                Navigator.of(context).pop();
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) =>
+                                            Modf_Empresa(empresa)));
+                              }),
+                        ),
                       ],
                     ),
                   );
@@ -175,17 +113,38 @@ class _Empresas extends State<Empresas> {
                     borderRadius: BorderRadius.circular(10),
                   ),
                   child: Column(children: [
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Ruc:              ${empresa['documento']}"),
+                    Row(
+                      children: <Widget>[
+                        const Expanded(
+                          child: Text("Ruc:"),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Text(empresa['documento']),
+                        ),
+                      ],
                     ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Empresa:      ${empresa['empresa']}"),
+                    Row(
+                      children: <Widget>[
+                        const Expanded(
+                          child: Text("Empresa:"),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Text(empresa['empresa']),
+                        ),
+                      ],
                     ),
-                    Align(
-                      alignment: Alignment.centerLeft,
-                      child: Text("Direccion:     ${empresa['direccion']}"),
+                    Row(
+                      children: <Widget>[
+                        const Expanded(
+                          child: Text("Direccion:"),
+                        ),
+                        Expanded(
+                          flex: 3,
+                          child: Text(empresa['direccion']),
+                        ),
+                      ],
                     ),
                   ]),
                 ),

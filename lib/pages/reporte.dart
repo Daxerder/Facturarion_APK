@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:gofact/funciones/list_view.dart';
 import 'ingreso.dart';
 import '../models/clases.dart';
 
@@ -16,13 +17,14 @@ class _Reporte extends State<Reporte> {
 
   @override
   void initState() {
-    getfact();
-    getbol();
+    /*getfact();
+    getbol();*/
     super.initState();
   }
 
   //coleccion de facturas
-  void getfact() async {
+  /*Future getfact() async {
+    List _facturas = [];
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection("facturas");
 
@@ -35,10 +37,11 @@ class _Reporte extends State<Reporte> {
         _facturas.add(doc.data());
       }
     }
-  }
+  }*/
 
   //coleccion de boletas
-  void getbol() async {
+  /*Future getbol() async {
+    List _boletas = [];
     CollectionReference collectionReference =
         FirebaseFirestore.instance.collection("boletas");
 
@@ -51,7 +54,7 @@ class _Reporte extends State<Reporte> {
         _boletas.add(doc.data());
       }
     }
-  }
+  }*/
 
   String gender = '';
   String _val = '';
@@ -73,77 +76,6 @@ class _Reporte extends State<Reporte> {
 
   @override
   Widget build(BuildContext context) {
-    ListView lista = ListView(
-      children: [
-        const DrawerHeader(
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-          ),
-          child: Center(
-            child: Text('Facturacion Electronica'),
-          ),
-        ),
-        /*AboutListTile(
-          child: Text("facturacion"),
-          applicationIcon: Icon(Icons.favorite),
-          applicationVersion: "v 10.1",
-          applicationName: "Demo Drawer",
-          icon: Icon(Icons.info),
-        ),*/
-        ListTile(
-          leading: const Icon(Icons.home),
-          title: const Text("Inicio"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil("/inicio", (route) => false);
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.add),
-          title: const Text("Generar"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil("/generar", (route) => false);
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.book),
-          title: const Text("Reporte"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil("/reporte", (route) => false);
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.app_registration),
-          title: const Text("Registrar Empresa"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil("/registrar", (route) => false);
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.exit_to_app),
-          title: const Text("Cerrar Sesion"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => Ingreso()),
-                  (route) => false);
-            });
-          },
-        ),
-      ],
-    );
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -155,7 +87,7 @@ class _Reporte extends State<Reporte> {
           title: const Text("Reportes"),
         ),
         drawer: Drawer(
-          child: lista,
+          child: list_view(context),
         ),
         body: Column(
           children: <Widget>[
@@ -278,32 +210,30 @@ class _Reporte extends State<Reporte> {
         minimumSize: const Size(300, 10),
         primary: const Color.fromARGB(255, 26, 37, 55),
       ),
-      onPressed: () {
+      onPressed: () async {
         gender = '';
-        setState(() {
-          tipo_mon = [];
-          mostrar = [];
-          total = [];
-
-          if (parametros[0].toString() != '') {
-            error = '';
-            //FACTURAS
-            if (parametros[0].toString() == 'Facturas') {
-              anadirFact();
-            }
-            //BOLETAS
-            else if (parametros[0].toString() == 'Boletas') {
-              anadirBol();
-            } else {
-              anadirBol();
-              anadirFact();
-            }
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => Visualizacion()));
-          } else {
-            error = 'No a seleccion nado ninguna opcion';
+        mostrar.clear();
+        tipo_mon = [];
+        total = [];
+        if (parametros[0].toString() != '') {
+          error = '';
+          //FACTURAS
+          if (parametros[0].toString() == 'Facturas') {
+            await anadirFact();
           }
-        });
+          //BOLETAS
+          else if (parametros[0].toString() == 'Boletas') {
+            await anadirBol();
+          } else {
+            await anadirBol();
+            await anadirFact();
+          }
+
+          Navigator.push(context,
+              MaterialPageRoute(builder: (context) => Visualizacion()));
+        } else {
+          error = 'No a seleccion nado ninguna opcion';
+        }
       },
       child: const Text("Generar Reporte"),
     );
@@ -368,7 +298,20 @@ class _Reporte extends State<Reporte> {
   }
 
   //Funciones
-  anadirFact() {
+  anadirFact() async {
+    _facturas.clear();
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection("facturas");
+
+    QuerySnapshot fact =
+        await collectionReference.get(); //await porq es un future
+
+    if (fact.docs.length != 0) {
+      //docs cantidad de documentos
+      for (var doc in fact.docs) {
+        _facturas.add(doc.data());
+      }
+    }
     if (parametros[1].toString() == '') {
       for (var i = 0; i < _facturas.length; i++) {
         mostrar.add(_facturas[i]);
@@ -398,7 +341,20 @@ class _Reporte extends State<Reporte> {
     }
   }
 
-  anadirBol() {
+  anadirBol() async {
+    _boletas.clear();
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection("boletas");
+
+    QuerySnapshot bol =
+        await collectionReference.get(); //await porq es un future
+
+    if (bol.docs.length != 0) {
+      //docs cantidad de documentos
+      for (var doc in bol.docs) {
+        _boletas.add(doc.data());
+      }
+    }
     if (parametros[1].toString() == '') {
       for (var i = 0; i < _boletas.length; i++) {
         mostrar.add(_boletas[i]);

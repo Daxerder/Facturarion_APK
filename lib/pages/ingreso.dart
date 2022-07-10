@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/services.dart';
 import 'package:gofact/db/sqlite.dart';
 import 'package:gofact/funciones/numero_a_letras.dart';
 import 'inicio.dart';
@@ -97,6 +98,9 @@ class _Ingreso extends State<Ingreso> {
       padding: const EdgeInsets.symmetric(horizontal: 10),
       child: TextField(
         keyboardType: TextInputType.text,
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]")),
+        ],
         maxLength: 8,
         controller: user,
         decoration: const InputDecoration(
@@ -115,6 +119,9 @@ class _Ingreso extends State<Ingreso> {
         maxLength: 8,
         obscureText: true,
         obscuringCharacter: "*",
+        inputFormatters: [
+          FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9]")),
+        ],
         controller: password,
         decoration: const InputDecoration(
           prefixIcon: Icon(Icons.key),

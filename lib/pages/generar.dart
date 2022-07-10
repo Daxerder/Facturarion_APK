@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
+import 'package:gofact/funciones/list_view.dart';
 import 'package:gofact/models/clases.dart';
 import 'package:gofact/db/sqlite.dart';
 import 'package:gofact/pag_secundarias/modf_prod.dart';
-import 'ingreso.dart';
 import '../pag_secundarias/crear_prod.dart';
 import 'emision.dart';
 
@@ -83,77 +84,6 @@ class _Generar extends State<Generar> {
       ];
   @override
   Widget build(BuildContext context) {
-    ListView lista = ListView(
-      children: [
-        const DrawerHeader(
-          decoration: BoxDecoration(
-            color: Colors.transparent,
-          ),
-          child: Center(
-            child: Text('Facturacion Electronica'),
-          ),
-        ),
-        /*AboutListTile(
-          child: Text("facturacion"),
-          applicationIcon: Icon(Icons.favorite),
-          applicationVersion: "v 10.1",
-          applicationName: "Demo Drawer",
-          icon: Icon(Icons.info),
-        ),*/
-        ListTile(
-          leading: const Icon(Icons.home),
-          title: const Text("Inicio"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil("/inicio", (route) => false);
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.add),
-          title: const Text("Generar"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil("/generar", (route) => false);
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.book),
-          title: const Text("Reporte"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil("/reporte", (route) => false);
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.app_registration),
-          title: const Text("Registrar Empresa"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context)
-                  .pushNamedAndRemoveUntil("/registrar", (route) => false);
-            });
-          },
-        ),
-        ListTile(
-          leading: const Icon(Icons.exit_to_app),
-          title: const Text("Cerrar Sesion"),
-          onTap: () {
-            setState(() {
-              Navigator.of(context).pushAndRemoveUntil(
-                  MaterialPageRoute(
-                      builder: (BuildContext context) => Ingreso()),
-                  (route) => false);
-            });
-          },
-        ),
-      ],
-    );
     return Container(
       decoration: const BoxDecoration(
         image: DecorationImage(
@@ -165,7 +95,7 @@ class _Generar extends State<Generar> {
           title: const Text("Generar"),
         ),
         drawer: Drawer(
-          child: lista,
+          child: list_view(context),
         ),
         body: cuerpo(),
       ),
@@ -333,6 +263,9 @@ class _Generar extends State<Generar> {
           TextFormField(
             keyboardType: TextInputType.number,
             controller: documento,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+            ],
             decoration: const InputDecoration(
                 labelText: 'Documento Cliente',
                 labelStyle: TextStyle(color: Colors.white)),
@@ -433,8 +366,6 @@ class _Generar extends State<Generar> {
         Container(
           height: 40,
           alignment: Alignment.center,
-          //decoration: BoxDecoration(
-          //color: Colors.white, borderRadius: BorderRadius.circular(10)),
           child: Row(
             children: [
               Container(
@@ -468,12 +399,10 @@ class _Generar extends State<Generar> {
         ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 10),
-          //alignment: Alignment.center,
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(10)),
           child: ProductWidget(),
         ),
-        //tipo: _tipomon[1],
         Row(
           children: [
             Expanded(

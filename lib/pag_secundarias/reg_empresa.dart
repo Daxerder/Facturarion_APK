@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/services.dart';
 
 class RegistrarEmpresa extends StatefulWidget {
   @override
@@ -71,6 +72,9 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
             controller: _documento,
             keyboardType: TextInputType.number,
             maxLength: 11,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+            ],
             decoration: const InputDecoration(
                 labelText: 'Ruc/Dni',
                 labelStyle: TextStyle(color: Colors.white)),
@@ -84,13 +88,18 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
           ),
           TextFormField(
             controller: _empresa,
-            maxLength: 20,
+            maxLength: 30,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9 .-]")),
+            ],
             decoration: const InputDecoration(
                 labelText: 'Empresa',
                 labelStyle: TextStyle(color: Colors.white)),
             style: const TextStyle(color: Colors.white),
             onChanged: (String empresa) {
               getEmpresa(empresa);
+              _empresa.value = TextEditingValue(
+                  text: empresa.toUpperCase(), selection: _empresa.selection);
             },
           ),
           const SizedBox(
@@ -98,13 +107,19 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
           ),
           TextFormField(
             controller: _direccion,
-            maxLength: 20,
+            maxLength: 30,
+            inputFormatters: [
+              FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9 .-]")),
+            ],
             decoration: const InputDecoration(
                 labelText: 'Direccion',
                 labelStyle: TextStyle(color: Colors.white)),
             style: const TextStyle(color: Colors.white),
             onChanged: (String direccion) {
               getDireccion(direccion);
+              _direccion.value = TextEditingValue(
+                  text: direccion.toUpperCase(),
+                  selection: _direccion.selection);
             },
           ),
           const SizedBox(
@@ -127,21 +142,6 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
                           (doc != '10' && doc != '15' && doc != '20')) {
                         SnackBar snack = const SnackBar(
                           content: Text('Error en el Ruc/Dni'),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snack);
-                      } else if (!validar_doc(Documento)) {
-                        SnackBar snack = const SnackBar(
-                          content: Text('Error en el Ruc/Dni'),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snack);
-                      } else if (!validar_text(Empresa)) {
-                        SnackBar snack = const SnackBar(
-                          content: Text('Error en el campo Empresa'),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snack);
-                      } else if (!validar_text(Direccion)) {
-                        SnackBar snack = const SnackBar(
-                          content: Text('Error en el campo Direccion'),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snack);
                       } else {
@@ -226,18 +226,6 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
     Direccion = '';
   }
 
-  bool validar_text(String texto) {
-    String palabra = texto;
-
-    for (var i = 0; i < palabra.length; i++) {
-      if (!texto[i].contains(RegExp(r"[a-záéíóúüñA-ZÑ0-9. -]"))) {
-        return false;
-      }
-    }
-
-    return true;
-  }
-
   String quitar_espacios(String palabra) {
     String nueva = '';
     palabra = palabra.trim();
@@ -254,15 +242,5 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
       }
     }
     return nueva;
-  }
-
-  bool validar_doc(String texto) {
-    String palabra = texto;
-    for (var i = 0; i < palabra.length; i++) {
-      if (!texto[i].contains(RegExp(r"[0-9]"))) {
-        return false;
-      }
-    }
-    return true;
   }
 }

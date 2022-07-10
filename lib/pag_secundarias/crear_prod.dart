@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:gofact/models/clases.dart';
 import 'package:gofact/providers/list_prod.dart';
 import 'package:provider/provider.dart';
@@ -37,19 +38,27 @@ class _Crear_Producto extends State<Crear_Producto> {
                   autofocus: true,
                   keyboardType: TextInputType.text,
                   maxLength: 20,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9 .]")),
+                  ],
                   decoration: const InputDecoration(
                       labelText: 'Producto',
                       labelStyle: TextStyle(color: Colors.white)),
                   style: const TextStyle(color: Colors.white),
                   controller: _producto,
-                  validator: (value) {
-                    String text = value.toString();
+                  onChanged: (value) {
+                    _producto.value = TextEditingValue(
+                        text: value.toUpperCase(),
+                        selection: _producto.selection);
                   },
                 ),
                 TextFormField(
                   autofocus: true,
                   keyboardType: TextInputType.number,
                   maxLength: 3,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp("[0-9]")),
+                  ],
                   decoration: const InputDecoration(
                       labelText: 'Cantidad',
                       labelStyle: TextStyle(color: Colors.white)),
@@ -60,6 +69,9 @@ class _Crear_Producto extends State<Crear_Producto> {
                   autofocus: true,
                   keyboardType: TextInputType.number,
                   maxLength: 4,
+                  inputFormatters: [
+                    FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
+                  ],
                   decoration: const InputDecoration(
                       labelText: 'Precio Unitario',
                       labelStyle: TextStyle(color: Colors.white)),
@@ -73,9 +85,6 @@ class _Crear_Producto extends State<Crear_Producto> {
                   ),
                   style: TextButton.styleFrom(backgroundColor: Colors.blue),
                   onPressed: () async {
-                    //print(validar_precio(_precio.text));
-                    //print(texto.contains(RegExp(r"[a-z]")));
-                    //print("entro al pressed");
                     if (_producto.text != '' &&
                         _cantidad.text != '' &&
                         _precio.text != '') {
@@ -83,11 +92,6 @@ class _Crear_Producto extends State<Crear_Producto> {
                       if (!validar_text(_producto.text)) {
                         SnackBar snack = const SnackBar(
                           content: Text('Error en campo Producto'),
-                        );
-                        ScaffoldMessenger.of(context).showSnackBar(snack);
-                      } else if (!validar_cant(_cantidad.text)) {
-                        SnackBar snack = const SnackBar(
-                          content: Text('Error en campo Cantidad'),
                         );
                         ScaffoldMessenger.of(context).showSnackBar(snack);
                       } else if (!validar_precio(_precio.text)) {
@@ -130,11 +134,7 @@ class _Crear_Producto extends State<Crear_Producto> {
     String palabra = texto;
     String nueva = '';
     palabra = palabra.trim(); //reemplaza al incio y al final los espacios
-    for (var i = 0; i < palabra.length; i++) {
-      if (!texto[i].contains(RegExp(r"[a-záéíóúüñA-ZÑ0-9 ]"))) {
-        return false;
-      }
-    }
+
     /*palabra = palabra.replaceAll(
         "\\s{2,}", " "); //reemplaza 2 espacios o mas en blanco por 1 solo*/
     for (var i = 0; i < palabra.length; i++) {
@@ -149,25 +149,9 @@ class _Crear_Producto extends State<Crear_Producto> {
         }
       }
     }
-
     setState(() {
       _producto.text = nueva;
     });
-    return true;
-  }
-
-  bool validar_cant(String texto) {
-    String palabra = texto;
-    palabra = palabra.trim();
-    setState(() {
-      _cantidad.text = palabra;
-    });
-    for (var i = 0; i < palabra.length; i++) {
-      if (!texto[i].contains(RegExp(r"[0-9]"))) {
-        return false;
-      }
-    }
-
     return true;
   }
 
@@ -188,9 +172,6 @@ class _Crear_Producto extends State<Crear_Producto> {
           return false;
         }
       }
-      if (!texto[i].contains(RegExp(r"[0-9.]"))) {
-        return false;
-      }
     }
     if (pos == 0) {
       setState(() {
@@ -203,5 +184,11 @@ class _Crear_Producto extends State<Crear_Producto> {
       _precio.text = num.toStringAsFixed(2);
     });
     return true;
+  }
+
+  String funcion(valor) {
+    String nuevo = valor.toString().toUpperCase();
+
+    return nuevo;
   }
 }

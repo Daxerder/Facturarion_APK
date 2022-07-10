@@ -2,13 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:gofact/db/sqlite.dart';
 import 'package:gofact/models/pdf_api.dart';
 import 'package:gofact/pag_secundarias/downloads.dart';
-import 'package:gofact/pages/ingreso.dart';
-import 'package:open_file/open_file.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../models/clases.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'dart:convert';
 
 class Emision extends StatefulWidget {
   final FoB comprobante;
@@ -127,47 +123,6 @@ class _Emision extends State<Emision> {
             ),
           ),
         ),
-        /*Container(
-            height: 250,
-            decoration: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(10),
-            ),
-            child: Column(
-              children: [
-                SizedBox(
-                  height: 200,
-                  width: 200,
-                  child: Column(
-                    children: [
-                      Container(
-                        height: 150,
-                        child: const Icon(
-                          Icons.check_circle,
-                          color: Colors.green,
-                          size: 100,
-                        ),
-                      ),
-                      Container(
-                        alignment: Alignment.center,
-                        //height: 50,
-                        child: const Text(
-                          "Emitido con Exito",
-                          textAlign: TextAlign.center,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-                ElevatedButton(
-                    onPressed: () {
-                      Navigator.of(context)
-                          .pushNamedAndRemoveUntil("/inicio", (route) => false);
-                    },
-                    child: const Text("INICIO"))
-              ],
-            ),
-          ),*/
       ),
     );
   }
