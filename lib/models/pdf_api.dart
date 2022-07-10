@@ -516,11 +516,9 @@ class PdfApi {
                             Row(
                               children: [
                                 Expanded(
-                                    child: Text("SubTotal Ventas",
+                                    child: Text("SubTotal Ventas :",
                                         textAlign: TextAlign.right,
                                         style: const TextStyle(fontSize: 7.5))),
-                                SizedBox(width: 1),
-                                Text(":"),
                                 SizedBox(width: 1),
                                 Expanded(
                                     child: Container(
@@ -580,11 +578,9 @@ class PdfApi {
                             Row(
                               children: [
                                 Expanded(
-                                    child: Text("Descuentos",
+                                    child: Text("Descuentos :",
                                         textAlign: TextAlign.right,
                                         style: const TextStyle(fontSize: 7.5))),
-                                SizedBox(width: 1),
-                                Text(":"),
                                 SizedBox(width: 1),
                                 Expanded(
                                     child: Container(
@@ -609,11 +605,9 @@ class PdfApi {
                             Row(
                               children: [
                                 Expanded(
-                                    child: Text("IGV",
+                                    child: Text("IGV :",
                                         textAlign: TextAlign.right,
                                         style: const TextStyle(fontSize: 7.5))),
-                                SizedBox(width: 1),
-                                Text(":"),
                                 SizedBox(width: 1),
                                 Expanded(
                                     child: Container(
@@ -641,11 +635,9 @@ class PdfApi {
                             Row(
                               children: [
                                 Expanded(
-                                    child: Text("ICBPER",
+                                    child: Text("ICBPER :",
                                         textAlign: TextAlign.right,
                                         style: const TextStyle(fontSize: 7.5))),
-                                SizedBox(width: 1),
-                                Text(":"),
                                 SizedBox(width: 1),
                                 Expanded(
                                     child: Container(
@@ -670,11 +662,9 @@ class PdfApi {
                             Row(
                               children: [
                                 Expanded(
-                                    child: Text("Importe Total",
+                                    child: Text("Importe Total :",
                                         textAlign: TextAlign.right,
                                         style: const TextStyle(fontSize: 7.5))),
-                                SizedBox(width: 1),
-                                Text(":"),
                                 SizedBox(width: 1),
                                 Expanded(
                                     child: Container(

@@ -468,7 +468,7 @@ class _Generar extends State<Generar> {
         ),
         Container(
           margin: const EdgeInsets.symmetric(vertical: 10),
-          alignment: Alignment.center,
+          //alignment: Alignment.center,
           decoration: BoxDecoration(
               color: Colors.white, borderRadius: BorderRadius.circular(10)),
           child: ProductWidget(),
@@ -509,6 +509,7 @@ class _Generar extends State<Generar> {
   Widget ProductWidget() {
     if (_productos.isNotEmpty) {
       return ListView.builder(
+        physics: const NeverScrollableScrollPhysics(),
         shrinkWrap: true,
         itemCount: _productos.length,
         itemBuilder: (BuildContext context, int index) {
