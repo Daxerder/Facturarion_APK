@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:firebase_storage/firebase_storage.dart';
+import 'package:gofact/funciones/numero_a_letras.dart';
 import 'package:gofact/models/clases.dart';
 import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
@@ -50,8 +51,8 @@ class PdfApi {
     double total = calcular_total(productos);
     double base = calcular_base(total);
     double igv = calcular_igv(base);
-
     String moneda = tipo_mon(comprobante.moneda);
+    String total_letras = num_letras(total) + " " + comprobante.moneda;
 
     pdf.addPage(
       MultiPage(
@@ -89,20 +90,28 @@ class PdfApi {
                           children: [
                             Align(
                               alignment: Alignment.centerLeft,
-                              child: Text("GO-FACT"),
+                              child: Text("GO-FACT",
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold)),
                             ),
                             Align(
                               alignment: Alignment.centerLeft,
-                              child: Text("GO-FACT"),
+                              child: Text("GO-FACT",
+                                  style: TextStyle(
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold)),
                             ),
                             Align(
                               alignment: Alignment.centerLeft,
                               child: Text(
-                                  "AV SANTIAGO DE SURCO N° 4717, SANTIAGO DE SURCO 15039"),
+                                  "AV SANTIAGO DE SURCO N° 4717, SANTIAGO DE SURCO 15039",
+                                  style: const TextStyle(fontSize: 9)),
                             ),
                             Align(
                               alignment: Alignment.centerLeft,
-                              child: Text("LIMA-LIMA"),
+                              child: Text("LIMA-LIMA",
+                                  style: const TextStyle(fontSize: 9)),
                             ),
                           ],
                         ),
@@ -123,13 +132,27 @@ class PdfApi {
                           ),
                           child: Column(
                             children: [
-                              (comprobante.serie == 'F001')
+                              /*(comprobante.serie == 'F001')
                                   ? Text("FACTURA ELECTRONICA")
-                                  : Text("BOLETA ELECTRONICA"),
-                              Text("RUC: 20725191109"),
-                              Text(comprobante.serie +
-                                  '-' +
-                                  comprobante.correlativo.toString()),
+                                  : Text("BOLETA ELECTRONICA"),*/
+                              Text(
+                                  (comprobante.serie == 'F001')
+                                      ? "FACTURA ELECTRONICA"
+                                      : "BOLETA ELECTRONICA",
+                                  style: TextStyle(
+                                      fontSize: 9.5,
+                                      fontWeight: FontWeight.bold)),
+                              Text("RUC: 20725191109",
+                                  style: TextStyle(
+                                      fontSize: 9.5,
+                                      fontWeight: FontWeight.bold)),
+                              Text(
+                                  comprobante.serie +
+                                      '-' +
+                                      comprobante.correlativo.toString(),
+                                  style: TextStyle(
+                                      fontSize: 9.5,
+                                      fontWeight: FontWeight.bold)),
                             ],
                           ),
                         ),
@@ -154,12 +177,16 @@ class PdfApi {
                             Expanded(
                               child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Fecha de Emisión"),
+                                child: Text("Fecha de Emisión",
+                                    style: const TextStyle(fontSize: 8)),
                               ),
                             ),
                             Text(":"),
                             Expanded(
-                              child: Text(comprobante.f_emi),
+                              child: Text(comprobante.f_emi,
+                                  style: TextStyle(
+                                      fontSize: 7.5,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ]),
                           //Fecha de Vencimiento
@@ -167,12 +194,16 @@ class PdfApi {
                             Expanded(
                               child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Fecha de Vencimiento"),
+                                child: Text("Fecha de Vencimiento",
+                                    style: const TextStyle(fontSize: 8)),
                               ),
                             ),
                             Text(":"),
                             Expanded(
-                              child: Text(comprobante.f_venc),
+                              child: Text(comprobante.f_venc,
+                                  style: TextStyle(
+                                      fontSize: 7.5,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ]),
                           //Empresa Nombre cliente
@@ -180,28 +211,39 @@ class PdfApi {
                             Expanded(
                               child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Señor(es)"),
+                                child: Text("Señor(es)",
+                                    style: const TextStyle(fontSize: 8)),
                               ),
                             ),
                             Text(":"),
                             Expanded(
                               child: Text(
-                                  comprobante.cliente.empresa.toUpperCase()),
+                                  comprobante.cliente.empresa.toUpperCase(),
+                                  style: TextStyle(
+                                      fontSize: 7.5,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ]),
                           //Ruc Cliente
                           Row(children: [
                             Expanded(
                               child: Align(
-                                alignment: Alignment.centerLeft,
-                                child: (comprobante.serie == 'F001')
+                                  alignment: Alignment.centerLeft,
+                                  child: /*(comprobante.serie == 'F001')
                                     ? Text("Ruc")
-                                    : Text("RUC/DNI"),
-                              ),
+                                    : Text("RUC/DNI"),*/
+                                      Text(
+                                          (comprobante.serie == 'F001')
+                                              ? "Ruc"
+                                              : "RUC/DNI",
+                                          style: const TextStyle(fontSize: 8))),
                             ),
                             Text(":"),
                             Expanded(
-                              child: Text(comprobante.cliente.documento),
+                              child: Text(comprobante.cliente.documento,
+                                  style: TextStyle(
+                                      fontSize: 7.5,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ]),
                           //Direccion del receptor
@@ -209,12 +251,17 @@ class PdfApi {
                             Expanded(
                               child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Dirección del Cliente"),
+                                child: Text("Dirección del Cliente",
+                                    style: const TextStyle(fontSize: 8)),
                               ),
                             ),
                             Text(":"),
                             Expanded(
-                              child: Text(comprobante.cliente.direccion),
+                              child: Text(
+                                  comprobante.cliente.direccion.toUpperCase(),
+                                  style: TextStyle(
+                                      fontSize: 7.5,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ]),
                           //Tipo de Moneda
@@ -222,12 +269,16 @@ class PdfApi {
                             Expanded(
                               child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Tipo de Moneda"),
+                                child: Text("Tipo de Moneda",
+                                    style: const TextStyle(fontSize: 8)),
                               ),
                             ),
                             Text(":"),
                             Expanded(
-                              child: Text(comprobante.moneda),
+                              child: Text(comprobante.moneda.toUpperCase(),
+                                  style: TextStyle(
+                                      fontSize: 7.5,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ]),
                           //Observacion
@@ -235,12 +286,16 @@ class PdfApi {
                             Expanded(
                               child: Align(
                                 alignment: Alignment.centerLeft,
-                                child: Text("Observación"),
+                                child: Text("Observación",
+                                    style: const TextStyle(fontSize: 8)),
                               ),
                             ),
                             Text(":"),
                             Expanded(
-                              child: Text(""),
+                              child: Text("",
+                                  style: TextStyle(
+                                      fontSize: 7.5,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ]),
                         ]),
@@ -248,7 +303,8 @@ class PdfApi {
                       Expanded(
                         child: Align(
                           alignment: Alignment.topCenter,
-                          child: Text("Forma de Pago: Contado"),
+                          child: Text("Forma de Pago: Contado",
+                              style: const TextStyle(fontSize: 7.5)),
                         ),
                       ),
                     ],
@@ -280,8 +336,11 @@ class PdfApi {
                                   border: Border(bottom: BorderSide(width: 1))),
                               margin:
                                   const EdgeInsets.only(left: 5, right: 2.5),
-                              child:
-                                  Text("Cantidad", textAlign: TextAlign.center),
+                              child: Text("Cantidad",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 7.5,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ),
                           Expanded(
@@ -290,7 +349,10 @@ class PdfApi {
                                   border: Border(bottom: BorderSide(width: 1))),
                               margin: const EdgeInsets.only(right: 2.5),
                               child: Text("Unidad Medida",
-                                  textAlign: TextAlign.center),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 7.5,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ),
                           Expanded(
@@ -299,7 +361,10 @@ class PdfApi {
                               decoration: const BoxDecoration(
                                   border: Border(bottom: BorderSide(width: 1))),
                               margin: const EdgeInsets.only(right: 2.5),
-                              child: Text("Descripcion"),
+                              child: Text("Descripcion",
+                                  style: TextStyle(
+                                      fontSize: 7.5,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ),
                           Expanded(
@@ -308,7 +373,10 @@ class PdfApi {
                                   border: Border(bottom: BorderSide(width: 1))),
                               margin: const EdgeInsets.only(right: 2.5),
                               child: Text("Valor Unitario",
-                                  textAlign: TextAlign.center),
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 7.5,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ),
                           Expanded(
@@ -316,8 +384,11 @@ class PdfApi {
                               decoration: const BoxDecoration(
                                   border: Border(bottom: BorderSide(width: 1))),
                               margin: const EdgeInsets.only(right: 5),
-                              child:
-                                  Text("ICBPER", textAlign: TextAlign.center),
+                              child: Text("ICBPER",
+                                  textAlign: TextAlign.center,
+                                  style: TextStyle(
+                                      fontSize: 7.5,
+                                      fontWeight: FontWeight.bold)),
                             ),
                           ),
                         ],
@@ -335,21 +406,24 @@ class PdfApi {
                                   margin: const EdgeInsets.only(
                                       left: 5, right: 2.5),
                                   child: Text("${prod.cantidad}",
-                                      textAlign: TextAlign.right),
+                                      textAlign: TextAlign.right,
+                                      style: const TextStyle(fontSize: 7.5)),
                                 ),
                               ),
                               Expanded(
                                 child: Container(
                                   margin: const EdgeInsets.only(right: 2.5),
                                   child: Text("UNIDAD",
-                                      textAlign: TextAlign.center),
+                                      textAlign: TextAlign.center,
+                                      style: const TextStyle(fontSize: 7.5)),
                                 ),
                               ),
                               Expanded(
                                 flex: 2,
                                 child: Container(
                                   margin: const EdgeInsets.only(right: 2.5),
-                                  child: Text(prod.descripcion),
+                                  child: Text(prod.descripcion.toUpperCase(),
+                                      style: const TextStyle(fontSize: 7.5)),
                                 ),
                               ),
                               Expanded(
@@ -357,14 +431,16 @@ class PdfApi {
                                   margin: const EdgeInsets.only(right: 2.5),
                                   //"${prod.cantidad * prod.total}"
                                   child: Text(prod.total.toStringAsFixed(2),
-                                      textAlign: TextAlign.right),
+                                      textAlign: TextAlign.right,
+                                      style: const TextStyle(fontSize: 7.5)),
                                 ),
                               ),
                               Expanded(
                                 child: Container(
                                   margin: const EdgeInsets.only(right: 5),
-                                  child:
-                                      Text("0.00", textAlign: TextAlign.right),
+                                  child: Text("0.00",
+                                      textAlign: TextAlign.right,
+                                      style: const TextStyle(fontSize: 7.5)),
                                 ),
                               ),
                             ],
@@ -389,7 +465,7 @@ class PdfApi {
                                   flex: 2,
                                   child: Text(
                                       "Valor de Venta de Operaciones Gratuitas",
-                                      style: const TextStyle(fontSize: 9.5)),
+                                      style: const TextStyle(fontSize: 9)),
                                 ),
                                 SizedBox(width: 1),
                                 Text(":"),
@@ -405,13 +481,16 @@ class PdfApi {
                                         bottom: BorderSide(width: 1),
                                       ),
                                     ),
-                                    child: Text("S/.0.00"),
+                                    child: Text("S/.0.00",
+                                        style: const TextStyle(fontSize: 9)),
                                   ),
                                 ),
                               ],
                             ),
                             SizedBox(height: 25),
-                            Text("SON: "),
+                            Text("SON: ${total_letras.toUpperCase()}",
+                                style: TextStyle(
+                                    fontSize: 9, fontWeight: FontWeight.bold)),
                           ],
                         ),
                       ),
@@ -438,7 +517,8 @@ class PdfApi {
                               children: [
                                 Expanded(
                                     child: Text("SubTotal Ventas",
-                                        textAlign: TextAlign.right)),
+                                        textAlign: TextAlign.right,
+                                        style: const TextStyle(fontSize: 7.5))),
                                 SizedBox(width: 1),
                                 Text(":"),
                                 SizedBox(width: 1),
@@ -458,7 +538,9 @@ class PdfApi {
                                             moneda +
                                                 ' ' +
                                                 base.toStringAsFixed(2),
-                                            textAlign: TextAlign.right))),
+                                            textAlign: TextAlign.right,
+                                            style: const TextStyle(
+                                                fontSize: 7.5)))),
                               ],
                             ),
                             SizedBox(height: 3),
@@ -466,10 +548,11 @@ class PdfApi {
                             Row(
                               children: [
                                 Expanded(
-                                    child: Text("Valor Venta",
-                                        textAlign: TextAlign.right)),
-                                SizedBox(width: 1),
-                                Text(":"),
+                                    child: Text("Valor Venta :",
+                                        textAlign: TextAlign.right,
+                                        style: const TextStyle(fontSize: 7.5))),
+                                /*SizedBox(width: 1),
+                                Text(":"),*/
                                 SizedBox(width: 1),
                                 Expanded(
                                     child: Container(
@@ -487,7 +570,9 @@ class PdfApi {
                                             moneda +
                                                 ' ' +
                                                 base.toStringAsFixed(2),
-                                            textAlign: TextAlign.right))),
+                                            textAlign: TextAlign.right,
+                                            style: const TextStyle(
+                                                fontSize: 7.5)))),
                               ],
                             ),
                             SizedBox(height: 3),
@@ -496,7 +581,8 @@ class PdfApi {
                               children: [
                                 Expanded(
                                     child: Text("Descuentos",
-                                        textAlign: TextAlign.right)),
+                                        textAlign: TextAlign.right,
+                                        style: const TextStyle(fontSize: 7.5))),
                                 SizedBox(width: 1),
                                 Text(":"),
                                 SizedBox(width: 1),
@@ -513,7 +599,9 @@ class PdfApi {
                                           ),
                                         ),
                                         child: Text("$moneda 0.00",
-                                            textAlign: TextAlign.right))),
+                                            textAlign: TextAlign.right,
+                                            style: const TextStyle(
+                                                fontSize: 7.5)))),
                               ],
                             ),
                             SizedBox(height: 3),
@@ -522,7 +610,8 @@ class PdfApi {
                               children: [
                                 Expanded(
                                     child: Text("IGV",
-                                        textAlign: TextAlign.right)),
+                                        textAlign: TextAlign.right,
+                                        style: const TextStyle(fontSize: 7.5))),
                                 SizedBox(width: 1),
                                 Text(":"),
                                 SizedBox(width: 1),
@@ -542,7 +631,9 @@ class PdfApi {
                                             moneda +
                                                 ' ' +
                                                 igv.toStringAsFixed(2),
-                                            textAlign: TextAlign.right))),
+                                            textAlign: TextAlign.right,
+                                            style: const TextStyle(
+                                                fontSize: 7.5)))),
                               ],
                             ),
                             SizedBox(height: 3),
@@ -551,7 +642,8 @@ class PdfApi {
                               children: [
                                 Expanded(
                                     child: Text("ICBPER",
-                                        textAlign: TextAlign.right)),
+                                        textAlign: TextAlign.right,
+                                        style: const TextStyle(fontSize: 7.5))),
                                 SizedBox(width: 1),
                                 Text(":"),
                                 SizedBox(width: 1),
@@ -568,7 +660,9 @@ class PdfApi {
                                           ),
                                         ),
                                         child: Text("$moneda 0.00",
-                                            textAlign: TextAlign.right))),
+                                            textAlign: TextAlign.right,
+                                            style: const TextStyle(
+                                                fontSize: 7.5)))),
                               ],
                             ),
                             SizedBox(height: 3),
@@ -577,7 +671,8 @@ class PdfApi {
                               children: [
                                 Expanded(
                                     child: Text("Importe Total",
-                                        textAlign: TextAlign.right)),
+                                        textAlign: TextAlign.right,
+                                        style: const TextStyle(fontSize: 7.5))),
                                 SizedBox(width: 1),
                                 Text(":"),
                                 SizedBox(width: 1),
@@ -597,7 +692,9 @@ class PdfApi {
                                             moneda +
                                                 ' ' +
                                                 total.toStringAsFixed(2),
-                                            textAlign: TextAlign.right))),
+                                            textAlign: TextAlign.right,
+                                            style: const TextStyle(
+                                                fontSize: 7.5)))),
                               ],
                             ),
                           ],
@@ -640,7 +737,6 @@ class PdfApi {
 
     final urlDownload = await snapshot.ref.getDownloadURL();
 
-    print("Donwload Link: $urlDownload");
     return urlDownload;
   }
 

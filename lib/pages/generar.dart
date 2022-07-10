@@ -183,7 +183,6 @@ class _Generar extends State<Generar> {
           setState(() {
             bool _validarDoc = false;
             if (actualpaso < mispasos().length - 1) {
-              print(empresa.text);
               switch (actualpaso) {
                 case 0:
                   if (tipo != '<Comprobante>') {
@@ -234,11 +233,8 @@ class _Generar extends State<Generar> {
                   break;
                 case 2:
               }
-              print(actualpaso);
               emision.text = f_emi;
               //documento.text = 'as'; para cambiar valor de text
-            } else {
-              print("ultimo step");
             }
           });
         },
@@ -248,7 +244,6 @@ class _Generar extends State<Generar> {
               actualpaso--;
             }
           });
-          print("Mi paso actual es " + actualpaso.toString());
         },
         controlsBuilder: (context, details) {
           //condicional para validar ultimo step
@@ -279,7 +274,6 @@ class _Generar extends State<Generar> {
                                       Emision(comprobante, _productos)),
                               (route) => false);
                         } else {
-                          print("ingresar Producto");
                           SnackBar snack = const SnackBar(
                             content: Text('Ingresar Producto'),
                           );
@@ -519,7 +513,6 @@ class _Generar extends State<Generar> {
         itemCount: _productos.length,
         itemBuilder: (BuildContext context, int index) {
           Producto prod = _productos[index];
-          print("productos: $prod");
           return ListTile(
             onTap: () {
               AlertDialog alerta = AlertDialog(
@@ -588,8 +581,9 @@ class _Generar extends State<Generar> {
             trailing: Container(
               alignment: Alignment.center,
               width: 90,
-              child: Text(
-                  _tipomon[1] + ' ' + (prod.total * prod.cantidad).toString()),
+              child: Text(_tipomon[1] +
+                  ' ' +
+                  (prod.total * prod.cantidad).toStringAsFixed(2)),
             ),
           );
         },

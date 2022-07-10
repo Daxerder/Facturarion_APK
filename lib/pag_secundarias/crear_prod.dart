@@ -44,7 +44,6 @@ class _Crear_Producto extends State<Crear_Producto> {
                   controller: _producto,
                   validator: (value) {
                     String text = value.toString();
-                    //print(text.contains(RegExp(r"[a-z]"), 1));
                   },
                 ),
                 TextFormField(
@@ -107,10 +106,8 @@ class _Crear_Producto extends State<Crear_Producto> {
                         final proListProvider = Provider.of<ProductoProvider>(
                             context,
                             listen: false);
-                        final producto = await ProductoProvider()
-                            .newProducto(_lista)
-                            .then((value) => print(_lista))
-                            .catchError((e) => print("error: $e"));
+                        final producto =
+                            await ProductoProvider().newProducto(_lista);
                         Navigator.of(context).pop();
                       }
                     } else {

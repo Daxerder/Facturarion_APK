@@ -43,56 +43,45 @@ class _Emision extends State<Emision> {
         _productos.add(producto);
       });
     }
-    print(_productos);
   }
 
   void emitir() async {
-    print("emitir");
-    print(_productos.length);
     comp.correlativo = await correlativo();
     DocumentReference documentReference;
-    print(comp.serie);
     if (comp.serie == 'F001') {
-      print("entro a facura");
       documentReference = FirebaseFirestore.instance
           .collection("facturas")
           .doc(comp.correlativo.toString());
     } else {
-      print("entro a boleta");
       documentReference = FirebaseFirestore.instance
           .collection("boletas")
           .doc(comp.correlativo.toString());
     }
     var arch = await PdfApi.generar(comp, this.widget.prod);
-    print("URL: ${arch.url}");
-    documentReference
-        .set(
-          {
-            'serie': comp.serie,
-            'correlativo': comp.correlativo,
-            //'cliente': comp.cliente,
-            'empresa': comp.cliente.empresa,
-            'documento': comp.cliente.documento,
-            'direccion': comp.cliente.direccion,
-            'f_emi': comp.f_emi,
-            'f_venc': comp.f_venc,
-            //_productos map
-            'productos': _productos,
-            'moneda': comp.moneda,
-            'url': arch.url,
-          },
-          SetOptions(merge: false),
-        )
-        .catchError((error) => print("falla $error"))
-        .whenComplete(() async {
-          DB.db.deleteAllProductos();
-          print("exito");
-          Navigator.of(context).pushAndRemoveUntil(
-              MaterialPageRoute(
-                  builder: (BuildContext context) => DescargarPDF(arch.pdf)),
-              (route) => false);
-          //PdfApi.openFile(arch.pdf);
-        });
+    documentReference.set(
+      {
+        'serie': comp.serie,
+        'correlativo': comp.correlativo,
+        //'cliente': comp.cliente,
+        'empresa': comp.cliente.empresa,
+        'documento': comp.cliente.documento,
+        'direccion': comp.cliente.direccion,
+        'f_emi': comp.f_emi,
+        'f_venc': comp.f_venc,
+        //_productos map
+        'productos': _productos,
+        'moneda': comp.moneda,
+        'url': arch.url,
+      },
+      SetOptions(merge: false),
+    ).whenComplete(() async {
+      DB.db.deleteAllProductos();
+      Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(
+              builder: (BuildContext context) => DescargarPDF(arch.pdf)),
+          (route) => false);
+      //PdfApi.openFile(arch.pdf);
+    });
   }
 
   Future<int> correlativo() async {

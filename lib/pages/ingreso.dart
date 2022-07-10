@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:gofact/db/sqlite.dart';
+import 'package:gofact/funciones/numero_a_letras.dart';
 import 'inicio.dart';
 import 'package:gofact/models/clases.dart';
 
@@ -135,7 +136,6 @@ class _Ingreso extends State<Ingreso> {
         for (var index = 0; index < _usuarios.length; index++) {
           if (user.text == _usuarios[index]['user']) {
             if (password.text == _usuarios[index]['password']) {
-              print("entro correctamente");
               setState(() {
                 //Navigator.of(context).pushNamed("/inicio");
                 Navigator.of(context).pushAndRemoveUntil(
@@ -148,7 +148,10 @@ class _Ingreso extends State<Ingreso> {
           }
         }
         if (!correcto) {
-          print("Usuario o contraseña incorrecto");
+          SnackBar snack = const SnackBar(
+            content: Text('Usuario y/o Contraseña incorrecta'),
+          );
+          ScaffoldMessenger.of(context).showSnackBar(snack);
           user.clear();
           password.clear();
         }

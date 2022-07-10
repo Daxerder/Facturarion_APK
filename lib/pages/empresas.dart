@@ -204,9 +204,9 @@ class _Empresas extends State<Empresas> {
     DocumentReference documentReference = FirebaseFirestore.instance
         .collection("empresas")
         .doc(documento.toString());
-    documentReference
-        .delete()
-        .then((value) => print("borrado id" + documento.toString()))
-        .catchError((error) => print("Fallo: $error"));
+    documentReference.delete()
+        /*.then((value) => print("borrado id" + documento.toString()))
+        .catchError((error) => print("Fallo: $error"))*/
+        ;
   }
 }

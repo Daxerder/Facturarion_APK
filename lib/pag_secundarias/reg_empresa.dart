@@ -149,7 +149,6 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
                         Empresa = quitar_espacios(Empresa);
                         List _empresas = await getEmpresas();
                         /*for(var i = 0; i < _empresas.length;i++){}*/
-                        print(_empresas);
                         for (var i = 0; i < _empresas.length; i++) {
                           if (_empresas[i]["documento"] == Documento) {
                             AlertDialog alerta = const AlertDialog(
@@ -203,19 +202,19 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
     DocumentReference documentReference =
         FirebaseFirestore.instance.collection("empresas").doc(Documento);
 
-    documentReference
-        .set(
-          {
-            "documento": Documento,
-            "direccion": Direccion,
-            "empresa": Empresa,
-          },
-          SetOptions(merge: false),
-        )
-        .catchError((error) => print("Failed to merge data: $error"))
+    documentReference.set(
+      {
+        "documento": Documento,
+        "direccion": Direccion,
+        "empresa": Empresa,
+      },
+      SetOptions(merge: false),
+    )
+        /*.catchError((error) => print("Failed to merge data: $error"))
         .whenComplete(() {
           print("Estudiante con nombre $Documento creado");
-        });
+        })*/
+        ;
   }
 
   limpiar() async {

@@ -34,7 +34,6 @@ class _Reporte extends State<Reporte> {
       for (var doc in fact.docs) {
         _facturas.add(doc.data());
       }
-      print(_facturas);
     }
   }
 
@@ -324,8 +323,6 @@ class _Reporte extends State<Reporte> {
         body: ListView.builder(
             itemCount: mostrar.length,
             itemBuilder: (context, index) {
-              print("mostrar");
-              print(mostrar.length);
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 alignment: Alignment.center,
@@ -435,7 +432,6 @@ class _Reporte extends State<Reporte> {
     var suma = 0.00;
     for (var ind = 0; ind < doc.length; ind++) {
       suma += (doc[ind]['total'] * doc[ind]['cantidad']);
-      print('suma $suma');
     }
     return suma;
   }

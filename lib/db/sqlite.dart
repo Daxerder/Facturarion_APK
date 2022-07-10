@@ -20,8 +20,6 @@ class DB {
   Future<Database> initDB() async {
     Directory documento = await getApplicationDocumentsDirectory();
     final path = join(documento.path, 'Pro.db');
-    print('Dirección de base de datos');
-    print(path);
 
     return await openDatabase(path, version: 1, onOpen: (db) {},
         onCreate: (Database db, int version) async {
