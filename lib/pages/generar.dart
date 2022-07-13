@@ -6,7 +6,7 @@ import 'package:gofact/models/clases.dart';
 import 'package:gofact/db/sqlite.dart';
 import 'package:gofact/pag_secundarias/modf_prod.dart';
 import '../pag_secundarias/crear_prod.dart';
-import 'emision.dart';
+import '../pag_secundarias/emision.dart';
 
 class Generar extends StatefulWidget {
   static const String ruta = "/generar";
@@ -15,15 +15,14 @@ class Generar extends StatefulWidget {
 }
 
 class _Generar extends State<Generar> {
-  @override
-  String f_emi = "";
-  String f_venc = '';
   var fecha_hoy = DateTime.now().toString() /*.toString().substring(0, 10)*/;
   List<Producto> _productos = [];
+  @override
   void initState() {
     DB.db.deleteAllProductos();
-    f_emi = formato_fecha(fecha_hoy);
-    vencimiento.text = f_emi;
+    emision.text = formato_fecha(fecha_hoy);
+    vencimiento.text = emision.text;
+
     super.initState();
   }
 
@@ -157,7 +156,6 @@ class _Generar extends State<Generar> {
                   break;
                 case 2:
               }
-              emision.text = f_emi;
               //documento.text = 'as'; para cambiar valor de text
             }
           });

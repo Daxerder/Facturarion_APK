@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gofact/db/sqlite.dart';
 import 'package:gofact/models/clases.dart';
-import 'package:gofact/providers/list_prod.dart';
 import 'package:provider/provider.dart';
 
 class Crear_Producto extends StatefulWidget {
@@ -101,11 +101,7 @@ class _Crear_Producto extends State<Crear_Producto> {
                         _lista.descripcion = _producto.text;
                         _lista.cantidad = double.parse(_cantidad.text);
                         _lista.total = double.parse(_precio.text);
-                        final proListProvider = Provider.of<ProductoProvider>(
-                            context,
-                            listen: false);
-                        final producto =
-                            await ProductoProvider().newProducto(_lista);
+                        await DB.db.nuevoProducto(_lista);
                         Navigator.of(context).pop();
                       }
                     } else {

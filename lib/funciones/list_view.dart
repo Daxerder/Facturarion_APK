@@ -28,6 +28,14 @@ Widget list_view(context) {
         },
       ),
       ListTile(
+        leading: const Icon(Icons.app_registration),
+        title: const Text("Registrar Empresa"),
+        onTap: () {
+          Navigator.of(context)
+              .pushNamedAndRemoveUntil("/registrar", (route) => false);
+        },
+      ),
+      ListTile(
         leading: const Icon(Icons.add),
         title: const Text("Generar Documento"),
         onTap: () {
@@ -41,14 +49,6 @@ Widget list_view(context) {
         onTap: () {
           Navigator.of(context)
               .pushNamedAndRemoveUntil("/reporte", (route) => false);
-        },
-      ),
-      ListTile(
-        leading: const Icon(Icons.app_registration),
-        title: const Text("Registrar Empresa"),
-        onTap: () {
-          Navigator.of(context)
-              .pushNamedAndRemoveUntil("/registrar", (route) => false);
         },
       ),
       ListTile(

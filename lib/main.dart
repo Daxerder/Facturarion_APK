@@ -5,10 +5,6 @@ import 'package:gofact/pages/inicio.dart';
 import 'package:gofact/pages/empresas.dart';
 import 'package:gofact/pages/reporte.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:gofact/providers/list_prod.dart';
-import 'package:provider/provider.dart';
-//import 'package:flutter_app_certus/bd/mongodb.dart';
-//import 'package:flutter_app_certus/models/visualizacion.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -23,21 +19,16 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return MultiProvider(
-      providers: [
-        ChangeNotifierProvider(create: (context) => new ProductoProvider()),
-      ],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        routes: <String, WidgetBuilder>{
-          Ingreso.ruta: (BuildContext context) => Ingreso(),
-          Inicio.ruta: (BuildContext context) => Inicio(),
-          Reporte.ruta: (BuildContext context) => Reporte(),
-          Generar.ruta: (BuildContext context) => Generar(),
-          Empresas.ruta: (BuildContext context) => Empresas(),
-        },
-        initialRoute: "/ingreso",
-      ),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      routes: <String, WidgetBuilder>{
+        Ingreso.ruta: (BuildContext context) => Ingreso(),
+        Inicio.ruta: (BuildContext context) => Inicio(),
+        Reporte.ruta: (BuildContext context) => Reporte(),
+        Generar.ruta: (BuildContext context) => Generar(),
+        Empresas.ruta: (BuildContext context) => Empresas(),
+      },
+      initialRoute: "/ingreso",
     );
   }
 }

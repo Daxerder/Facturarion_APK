@@ -37,40 +37,34 @@ class _Ingreso extends State<Ingreso> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: cuerpo(),
-    );
-  }
-
-  Widget cuerpo() {
-    return Container(
-      decoration: const BoxDecoration(
-        image: DecorationImage(
-            image: AssetImage('assets/fondo.jpg'), fit: BoxFit.cover),
-      ),
-      child: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[contenido()],
+      body: Container(
+        decoration: const BoxDecoration(
+          image: DecorationImage(
+              image: AssetImage('assets/fondo.jpg'), fit: BoxFit.cover),
         ),
-      ),
-    );
-  }
-
-  Widget contenido() {
-    return Container(
-      padding: const EdgeInsets.symmetric(vertical: 10),
-      width: 350,
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(10),
-        color: Colors.white,
-      ),
-      child: Column(
-        children: <Widget>[
-          titulo(),
-          usuario(),
-          contrasena(),
-          boton(),
-        ],
+        child: Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Container(
+                padding: const EdgeInsets.symmetric(vertical: 10),
+                width: 350,
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  color: Colors.white,
+                ),
+                child: Column(
+                  children: <Widget>[
+                    titulo(),
+                    usuario(),
+                    contrasena(),
+                    boton(),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

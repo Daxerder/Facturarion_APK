@@ -90,7 +90,7 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
             controller: _empresa,
             maxLength: 30,
             inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9 .-]")),
+              FilteringTextInputFormatter.allow(RegExp("[a-zñA-ZÑ0-9 .-]")),
             ],
             decoration: const InputDecoration(
                 labelText: 'Empresa',
@@ -109,7 +109,7 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
             controller: _direccion,
             maxLength: 30,
             inputFormatters: [
-              FilteringTextInputFormatter.allow(RegExp("[a-zA-Z0-9 .-]")),
+              FilteringTextInputFormatter.allow(RegExp("[a-zñA-ZÑ0-9 .-]")),
             ],
             decoration: const InputDecoration(
                 labelText: 'Direccion',
@@ -209,15 +209,10 @@ class _RegistrarEmpresa extends State<RegistrarEmpresa> {
         "empresa": Empresa,
       },
       SetOptions(merge: false),
-    )
-        /*.catchError((error) => print("Failed to merge data: $error"))
-        .whenComplete(() {
-          print("Estudiante con nombre $Documento creado");
-        })*/
-        ;
+    );
   }
 
-  limpiar() async {
+  limpiar() {
     _documento.text = '';
     _empresa.text = '';
     _direccion.text = '';
