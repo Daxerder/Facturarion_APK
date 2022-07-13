@@ -17,13 +17,6 @@ class ProductoProvider extends ChangeNotifier {
     return producto;
   }
 
-  /*cargarProductos() async {
-    final productos = await DB.db.getTodosProductos();
-    this.productos = [...?productos];
-    print(productos);
-    notifyListeners();
-  }*/
-
   borrarTodosProductos() async {
     await DB.db.deleteAllProductos();
     this.productos = [];

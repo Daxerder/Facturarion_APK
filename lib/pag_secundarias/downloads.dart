@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gofact/models/pdf_api.dart';
-import 'package:gofact/pages/ingreso.dart';
 import 'dart:io';
 
 class DescargarPDF extends StatefulWidget {
@@ -25,8 +24,6 @@ class _DescargarPDFState extends State<DescargarPDF> {
         body: Center(
           child: IntrinsicHeight(
             child: Container(
-              //height: double.infinity,
-              //constraints: const BoxConstraints(maxHeight: double.infinity),
               margin: const EdgeInsets.symmetric(horizontal: 50),
               decoration: BoxDecoration(
                 color: Colors.white,
@@ -55,10 +52,6 @@ class _DescargarPDFState extends State<DescargarPDF> {
                     children: [
                       Expanded(
                         child: MaterialButton(
-                            /*shape:const  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.only(
-                                bottomRight: Radius.circular(30)),
-                          ),*/
                             color: Colors.green,
                             onPressed: () {
                               PdfApi.openFile(this.widget.file);

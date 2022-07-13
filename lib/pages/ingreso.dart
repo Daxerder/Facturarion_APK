@@ -1,11 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/services.dart';
-import 'package:gofact/db/sqlite.dart';
-import 'package:gofact/funciones/numero_a_letras.dart';
 import 'inicio.dart';
-import 'package:gofact/models/clases.dart';
 
 class Ingreso extends StatefulWidget {
   static const String ruta = "/ingreso";

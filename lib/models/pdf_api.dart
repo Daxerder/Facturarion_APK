@@ -132,9 +132,6 @@ class PdfApi {
                           ),
                           child: Column(
                             children: [
-                              /*(comprobante.serie == 'F001')
-                                  ? Text("FACTURA ELECTRONICA")
-                                  : Text("BOLETA ELECTRONICA"),*/
                               Text(
                                   (comprobante.serie == 'F001')
                                       ? "FACTURA ELECTRONICA"

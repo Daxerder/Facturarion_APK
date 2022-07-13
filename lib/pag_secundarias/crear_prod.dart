@@ -3,7 +3,6 @@ import 'package:flutter/services.dart';
 import 'package:gofact/models/clases.dart';
 import 'package:gofact/providers/list_prod.dart';
 import 'package:provider/provider.dart';
-import 'package:path_provider/path_provider.dart';
 
 class Crear_Producto extends StatefulWidget {
   @override
@@ -88,7 +87,6 @@ class _Crear_Producto extends State<Crear_Producto> {
                     if (_producto.text != '' &&
                         _cantidad.text != '' &&
                         _precio.text != '') {
-                      ////////////////
                       if (!validar_text(_producto.text)) {
                         SnackBar snack = const SnackBar(
                           content: Text('Error en campo Producto'),
@@ -103,10 +101,6 @@ class _Crear_Producto extends State<Crear_Producto> {
                         _lista.descripcion = _producto.text;
                         _lista.cantidad = double.parse(_cantidad.text);
                         _lista.total = double.parse(_precio.text);
-
-                        /*print("entro al if");
-                        print(_lista.cantidad);*/
-
                         final proListProvider = Provider.of<ProductoProvider>(
                             context,
                             listen: false);
@@ -135,8 +129,7 @@ class _Crear_Producto extends State<Crear_Producto> {
     String nueva = '';
     palabra = palabra.trim(); //reemplaza al incio y al final los espacios
 
-    /*palabra = palabra.replaceAll(
-        "\\s{2,}", " "); //reemplaza 2 espacios o mas en blanco por 1 solo*/
+    //reemplaza 2 espacios o mas en blanco por 1 solo
     for (var i = 0; i < palabra.length; i++) {
       if (palabra[i] != ' ') {
         nueva = nueva + palabra[i];
@@ -188,7 +181,6 @@ class _Crear_Producto extends State<Crear_Producto> {
 
   String funcion(valor) {
     String nuevo = valor.toString().toUpperCase();
-
     return nuevo;
   }
 }

@@ -1,12 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/services.dart';
-import 'package:gofact/models/clases.dart';
 
 class Modf_Empresa extends StatefulWidget {
-  //final String doc, emp, direcc;
   final DocumentSnapshot modificar;
-  //Modf_Empresa(this.doc, this.emp, this.direcc);
   Modf_Empresa(this.modificar);
   @override
   State<Modf_Empresa> createState() => _Modf_Empresa();

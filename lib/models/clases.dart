@@ -59,11 +59,11 @@ class Producto {
 }
 
 //falta implementar
-class Form_pago {
+/*class Form_pago {
   String forma = '';
   int cuotas = 0;
   List<String> fechas = [];
-}
+}*/
 
 class FoB {
   String serie = '';
