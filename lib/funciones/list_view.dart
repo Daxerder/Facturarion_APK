@@ -6,10 +6,17 @@ Widget list_view(context) {
     children: [
       const DrawerHeader(
         decoration: BoxDecoration(
-          color: Colors.transparent,
-        ),
+            image: DecorationImage(
+          fit: BoxFit.cover,
+          image: AssetImage('assets/chanchito.jpeg'),
+        )
+            //color: Colors.transparent,
+            ),
         child: Center(
-          child: Text('Facturacion Electronica'),
+          child: Text(
+            'GO FACT',
+            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          ),
         ),
       ),
       ListTile(

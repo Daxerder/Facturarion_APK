@@ -17,21 +17,22 @@ class Generar extends StatefulWidget {
 class _Generar extends State<Generar> {
   @override
   String f_emi = "";
+  String f_venc = '';
+  var fecha_hoy = DateTime.now().toString() /*.toString().substring(0, 10)*/;
   List<Producto> _productos = [];
   void initState() {
     DB.db.deleteAllProductos();
-    //_loadProd();
-    hoy();
+    f_emi = formato_fecha(fecha_hoy);
+    vencimiento.text = f_emi;
     super.initState();
   }
 
-  hoy() {
-    var emi = new DateTime.now().toString().substring(0, 10);
-    String ano = emi.substring(0, 4),
-        mes = emi.substring(5, 7),
-        dia = emi.substring(8, 10);
-    f_emi = dia + '/' + mes + '/' + ano;
-    vencimiento.text = f_emi;
+  formato_fecha(String fecha) {
+    String ano = fecha.substring(0, 4),
+        mes = fecha.substring(5, 7),
+        dia = fecha.substring(8, 10);
+    String nueva_fecha = dia + '/' + mes + '/' + ano;
+    return nueva_fecha;
   }
 
   _loadProd() async {
@@ -57,10 +58,8 @@ class _Generar extends State<Generar> {
       _cantidad = TextEditingController(),
       _precio = TextEditingController();
   var error = "";
-  var _contador = 1;
   var tipo = '<Comprobante>';
   int actualpaso = 0;
-  var _mod_desc = '';
 
   List<Step> mispasos() => [
         Step(
@@ -141,12 +140,7 @@ class _Generar extends State<Generar> {
                       content: Text('Seleccion el Comprobante'),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snack);
-                  } /*else {
-                    SnackBar snack = const SnackBar(
-                      content: Text('Validar Documento'),
-                    );
-                    ScaffoldMessenger.of(context).showSnackBar(snack);
-                  }*/
+                  }
                   break;
                 case 1:
                   if (_tipomon[0] != 'Moneda') {
@@ -193,11 +187,6 @@ class _Generar extends State<Generar> {
                       child: const Text('Emitir'),
                       onPressed: () {
                         if (_productos.isNotEmpty) {
-                          /*Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) =>
-                                      Emision(comprobante, _productos)));*/
                           Navigator.of(context).pushAndRemoveUntil(
                               MaterialPageRoute(
                                   builder: (BuildContext context) =>
@@ -209,10 +198,6 @@ class _Generar extends State<Generar> {
                           );
                           ScaffoldMessenger.of(context).showSnackBar(snack);
                         }
-
-                        //print(comprobante.productos[1].total);
-                        //print(contador);
-                        //delete_temp();
                       },
                     ),
                   ),
@@ -310,14 +295,33 @@ class _Generar extends State<Generar> {
               labelStyle: TextStyle(color: Colors.white)),
           style: const TextStyle(color: Colors.white),
         ),
-        TextFormField(
+        TextField(
           enabled: false,
-          keyboardType: TextInputType.datetime,
+          keyboardType: TextInputType.none,
           controller: vencimiento,
           decoration: const InputDecoration(
               labelText: 'Fecha de Vencimiento',
               labelStyle: TextStyle(color: Colors.white)),
           style: const TextStyle(color: Colors.white),
+        ),
+        MaterialButton(
+          color: Colors.blue,
+          onPressed: () {
+            showDatePicker(
+              context: context,
+              initialDate: DateTime.now(),
+              firstDate: DateTime.now(),
+              lastDate: DateTime(2032),
+            ).then((date) {
+              setState(() {
+                vencimiento.text = formato_fecha(date.toString());
+              });
+            });
+          },
+          child: const Text(
+            "Fecha de Vencimiento",
+            style: TextStyle(color: Colors.white),
+          ),
         ),
         DropdownButton(
           iconEnabledColor: Colors.white,

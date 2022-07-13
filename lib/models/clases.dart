@@ -71,7 +71,6 @@ class FoB {
   Empresa cliente = Empresa();
   String f_emi = '';
   String f_venc = '';
-  //List<Producto> productos = [];
   String moneda = '';
 
   FoB() {
@@ -80,7 +79,6 @@ class FoB {
     cliente = Empresa();
     f_emi = '';
     f_venc = '';
-    //productos = [];
     moneda = '';
   }
 }

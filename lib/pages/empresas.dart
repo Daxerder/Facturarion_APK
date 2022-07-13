@@ -1,10 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:gofact/funciones/list_view.dart';
-import 'package:gofact/models/clases.dart';
 import 'package:gofact/pag_secundarias/modf_empresa.dart';
 import 'package:gofact/pag_secundarias/reg_empresa.dart';
-import 'ingreso.dart';
 
 class Empresas extends StatefulWidget {
   static const String ruta = "/registrar";
@@ -66,9 +64,9 @@ class _Empresas extends State<Empresas> {
                         Expanded(
                           child: Text("Remover", textAlign: TextAlign.center),
                         ),
-                        /*Expanded(
+                        Expanded(
                           child: Text("Modificar", textAlign: TextAlign.center),
-                        ),*/
+                        ),
                       ],
                     ),
                     content: Row(
@@ -163,9 +161,6 @@ class _Empresas extends State<Empresas> {
     DocumentReference documentReference = FirebaseFirestore.instance
         .collection("empresas")
         .doc(documento.toString());
-    documentReference.delete()
-        /*.then((value) => print("borrado id" + documento.toString()))
-        .catchError((error) => print("Fallo: $error"))*/
-        ;
+    documentReference.delete();
   }
 }

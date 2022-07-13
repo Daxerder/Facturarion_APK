@@ -1,9 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
-import 'package:firebase_core/firebase_core.dart';
+import 'package:gofact/funciones/filtros.dart';
 import 'package:gofact/funciones/list_view.dart';
-import 'ingreso.dart';
-import '../models/clases.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 class Reporte extends StatefulWidget {
   static const String ruta = "/reporte";
@@ -12,66 +10,37 @@ class Reporte extends StatefulWidget {
 }
 
 class _Reporte extends State<Reporte> {
-  List _facturas = [];
-  List _boletas = [];
-
   @override
-  void initState() {
-    /*getfact();
-    getbol();*/
-    super.initState();
-  }
-
-  //coleccion de facturas
-  /*Future getfact() async {
-    List _facturas = [];
-    CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection("facturas");
-
-    QuerySnapshot fact =
-        await collectionReference.get(); //await porq es un future
-
-    if (fact.docs.length != 0) {
-      //docs cantidad de documentos
-      for (var doc in fact.docs) {
-        _facturas.add(doc.data());
-      }
-    }
-  }*/
-
-  //coleccion de boletas
-  /*Future getbol() async {
-    List _boletas = [];
-    CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection("boletas");
-
-    QuerySnapshot bol =
-        await collectionReference.get(); //await porq es un future
-
-    if (bol.docs.length != 0) {
-      //docs cantidad de documentos
-      for (var doc in bol.docs) {
-        _boletas.add(doc.data());
-      }
-    }
-  }*/
-
   String gender = '';
   String _val = '';
   String fob = '';
-  List<double> total = [];
 
   //filtros
-  var _listtipo = ['Facturas', 'Boletas', 'Facturas y Boletas'];
-  var _listmoneda = ['Soles', 'Dolares', 'Vacio'];
-  var parametros = ['', '']; //faltaria añadir fecha, cliente tal vez
-  List tipo_mon = []; //Simbolo de soles dolares
+  final _listtipo = ['Facturas', 'Boletas', 'Facturas y Boletas'];
+  final _listmoneda = ['Todas', 'Soles', 'Dolares'];
+  final _listMeses = [
+    'Todos los Meses',
+    'Enero',
+    'Febrero',
+    'Marzo',
+    'Abril',
+    'Mayo',
+    'Junio',
+    'Julio',
+    'Agosto',
+    'Septiembre',
+    'Noviembre',
+    'Diciembre'
+  ];
+  var parametros = ['', '', '']; //faltaria añadir fecha, cliente tal vez
+
   //listafiltrada
   List mostrar = [];
 
   //variables de Text(mostrar)
   String _tipo = 'Seleccione una Opcion';
-  String _moneda = 'Seleccione una Opcion';
+  String _moneda = 'Todas';
+  String _mes = 'Todos los Meses';
   var error = '';
 
   @override
@@ -89,30 +58,19 @@ class _Reporte extends State<Reporte> {
         drawer: Drawer(
           child: list_view(context),
         ),
-        body: Column(
-          children: <Widget>[
-            tipo(),
-            Text(
-              error,
-              style: const TextStyle(color: Colors.red, fontSize: 20),
-            ),
-            moneda(),
-            Row(
-                /*mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-              children: [
-                Expanded(
-                  child: tipo(),
-                ),
-                Expanded(
-                  child: tipo(),
-                ),
-                Expanded(
-                  child: tipo(),
-                ),
-              ],*/
-                ),
-            boton(),
-          ],
+        body: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              tipo(),
+              Text(
+                error,
+                style: const TextStyle(color: Colors.red, fontSize: 20),
+              ),
+              moneda(),
+              meses(),
+              boton(),
+            ],
+          ),
         ),
       ),
     );
@@ -121,18 +79,19 @@ class _Reporte extends State<Reporte> {
   Widget tipo() {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.fromLTRB(0, 15, 0, 0),
-          child: const Text(
+        const Padding(
+          padding: EdgeInsets.only(left: 30, right: 30, top: 20),
+          child: Text(
             "Tipo de Documentos",
             style: TextStyle(color: Colors.white, fontSize: 20),
             textAlign: TextAlign.left,
           ),
         ),
-        Container(
-          width: 300,
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+        Padding(
+          padding:
+              const EdgeInsets.only(left: 30, right: 30, bottom: 0, top: 20),
           child: DropdownButton(
+            isDense: true,
             isExpanded: true,
             items: _listtipo.map((String a) {
               return DropdownMenuItem(value: a, child: Text(a));
@@ -142,6 +101,7 @@ class _Reporte extends State<Reporte> {
                 if (_value.toString() != 'Vacio') {
                   _tipo = _value.toString();
                   parametros[0] = _tipo;
+                  error = '';
                 } else {
                   _tipo = 'Seleccione una Opcion';
                   parametros[0] = '';
@@ -164,34 +124,82 @@ class _Reporte extends State<Reporte> {
   Widget moneda() {
     return Column(
       children: [
-        Container(
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          child: const Text(
+        const Padding(
+          padding: EdgeInsets.only(left: 30, right: 30, top: 10),
+          child: Text(
             "Tipo de Moneda",
             style: TextStyle(color: Colors.white, fontSize: 20),
           ),
         ),
         Container(
-          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
-          width: 300,
+          padding: const EdgeInsets.only(left: 30, right: 30, top: 20),
           child: DropdownButton(
+            isDense: true,
             isExpanded: true, //para que ocupe todo el contenedor
             items: _listmoneda.map((String a) {
-              return DropdownMenuItem(value: a, child: Text(a));
+              return DropdownMenuItem(
+                value: a,
+                child: Text(a),
+              );
             }).toList(),
             onChanged: (_value) => {
               setState(() {
-                if (_value.toString() != 'Vacio') {
+                if (_value.toString() != 'Todas') {
                   _moneda = _value.toString();
                   parametros[1] = _moneda;
                 } else {
-                  _moneda = 'Seleccione una Opcion';
+                  _moneda = 'Todas';
                   parametros[1] = '';
                 }
               }),
             },
             hint: Text(
               _moneda,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 20,
+              ),
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget meses() {
+    return Column(
+      children: [
+        Container(
+          padding: const EdgeInsets.fromLTRB(0, 20, 0, 0),
+          child: const Text(
+            "Mes",
+            style: TextStyle(color: Colors.white, fontSize: 20),
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.symmetric(horizontal: 30),
+          child: DropdownButton(
+            //isDense: true,
+            isExpanded: true, //para que ocupe todo el contenedor
+            items: _listMeses.map((String a) {
+              return DropdownMenuItem(
+                value: a,
+                child: Text(a),
+              );
+            }).toList(),
+            onChanged: (_value) => {
+              setState(() {
+                if (_value.toString() != 'Todos los Meses') {
+                  _mes = _value.toString();
+                  parametros[2] = _mes;
+                } else {
+                  _mes = 'Todos los Meses';
+                  parametros[2] = '';
+                }
+              }),
+            },
+            hint: Text(
+              ((parametros[2] != '') ? ("$_mes 2022") : _mes),
               style: const TextStyle(
                 color: Colors.white,
                 fontSize: 20,
@@ -213,26 +221,33 @@ class _Reporte extends State<Reporte> {
       onPressed: () async {
         gender = '';
         mostrar.clear();
-        tipo_mon = [];
-        total = [];
-        if (parametros[0].toString() != '') {
+        if (parametros[0] != '') {
           error = '';
           //FACTURAS
-          if (parametros[0].toString() == 'Facturas') {
-            await anadirFact();
+          if (parametros[0] == 'Facturas') {
+            mostrar = await anadirFact();
           }
           //BOLETAS
-          else if (parametros[0].toString() == 'Boletas') {
-            await anadirBol();
+          else if (parametros[0] == 'Boletas') {
+            mostrar = await anadirBol();
           } else {
-            await anadirBol();
-            await anadirFact();
+            mostrar += await anadirBol();
+            mostrar += await anadirFact();
           }
-
+          //Tipo de moneda
+          if (parametros[1] != '') {
+            mostrar = filtro_mon(mostrar, parametros[1]);
+          }
+          //meses
+          if (parametros[2] != '') {
+            mostrar = filtro_mes(mostrar, parametros[2]);
+          }
           Navigator.push(context,
               MaterialPageRoute(builder: (context) => Visualizacion()));
         } else {
-          error = 'No a seleccion nado ninguna opcion';
+          setState(() {
+            error = 'No a seleccion nado ninguna opcion';
+          });
         }
       },
       child: const Text("Generar Reporte"),
@@ -253,6 +268,13 @@ class _Reporte extends State<Reporte> {
         body: ListView.builder(
             itemCount: mostrar.length,
             itemBuilder: (context, index) {
+              var total = Total(mostrar[index]['productos']);
+              String tipo = '';
+              if (mostrar[index]['moneda'] == 'Soles') {
+                tipo = 'S/.';
+              } else {
+                tipo = '\$';
+              }
               return Container(
                 margin: const EdgeInsets.symmetric(vertical: 10),
                 alignment: Alignment.center,
@@ -260,6 +282,47 @@ class _Reporte extends State<Reporte> {
                     color: Colors.white,
                     borderRadius: BorderRadius.circular(10)),
                 child: ListTile(
+                  onTap: () {
+                    AlertDialog alerta = AlertDialog(
+                      /* Icon(
+                        iconSize: 50,
+                        color: Colors.green,
+                        icon:*/
+
+                      content: Column(
+                        mainAxisSize: MainAxisSize.min,
+                        //mainAxisAlignment: MainAxisAlignment.center,
+                        children: [
+                          Text(
+                            mostrar[index]['serie'] +
+                                '-' +
+                                mostrar[index]['correlativo'].toString(),
+                            textAlign: TextAlign.center,
+                            style: const TextStyle(fontSize: 20),
+                          ),
+                          IconButton(
+                            onPressed: () {
+                              String link = mostrar[index]['url'] + '.pdf';
+                              launchUrl(Uri.parse(link),
+                                  mode:
+                                      LaunchMode.externalNonBrowserApplication);
+                            },
+                            icon: const Icon(Icons.download),
+                            iconSize: 80,
+                            color: Colors.green,
+                          ),
+                          const Text(
+                            "Descargar",
+                            textAlign: TextAlign.center,
+                            style: TextStyle(fontSize: 15),
+                          ),
+                        ],
+                      ),
+                    );
+                    showDialog(
+                        context: context,
+                        builder: (BuildContext context) => alerta);
+                  },
                   title: Column(
                     //titulo
                     children: [
@@ -287,108 +350,12 @@ class _Reporte extends State<Reporte> {
                   trailing: Container(
                     alignment: Alignment.center,
                     width: 90,
-                    child:
-                        Text(tipo_mon[index] + ' ' + total[index].toString()),
+                    child: Text('$tipo ${total.toStringAsFixed(2)}'),
                   ), //al final
                 ),
               );
             }),
       ),
     );
-  }
-
-  //Funciones
-  anadirFact() async {
-    _facturas.clear();
-    CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection("facturas");
-
-    QuerySnapshot fact =
-        await collectionReference.get(); //await porq es un future
-
-    if (fact.docs.length != 0) {
-      //docs cantidad de documentos
-      for (var doc in fact.docs) {
-        _facturas.add(doc.data());
-      }
-    }
-    if (parametros[1].toString() == '') {
-      for (var i = 0; i < _facturas.length; i++) {
-        mostrar.add(_facturas[i]);
-        total.add(Total(_facturas[i]['productos']));
-        if (_facturas[i]['moneda'] == 'Soles') {
-          tipo_mon.add('S/.');
-        } else if (_facturas[i]['moneda'] == 'Dolares') {
-          tipo_mon.add('USD');
-        }
-      }
-    } else if (parametros[1].toString() == 'Soles') {
-      for (var i = 0; i < _facturas.length; i++) {
-        if (_facturas[i]['moneda'] == 'Soles') {
-          mostrar.add(_facturas[i]);
-          total.add(Total(_facturas[i]['productos']));
-          tipo_mon.add('S/.');
-        }
-      }
-    } else if (parametros[1].toString() == 'Dolares') {
-      for (var i = 0; i < _facturas.length; i++) {
-        if (_facturas[i]['moneda'] == 'Dolares') {
-          mostrar.add(_facturas[i]);
-          total.add(Total(_facturas[i]['productos']));
-          tipo_mon.add('USD');
-        }
-      }
-    }
-  }
-
-  anadirBol() async {
-    _boletas.clear();
-    CollectionReference collectionReference =
-        FirebaseFirestore.instance.collection("boletas");
-
-    QuerySnapshot bol =
-        await collectionReference.get(); //await porq es un future
-
-    if (bol.docs.length != 0) {
-      //docs cantidad de documentos
-      for (var doc in bol.docs) {
-        _boletas.add(doc.data());
-      }
-    }
-    if (parametros[1].toString() == '') {
-      for (var i = 0; i < _boletas.length; i++) {
-        mostrar.add(_boletas[i]);
-        total.add(Total(_boletas[i]['productos']));
-        if (_boletas[i]['moneda'] == 'Soles') {
-          tipo_mon.add('S/.');
-        } else if (_boletas[i]['moneda'] == 'Dolares') {
-          tipo_mon.add('USD');
-        }
-      }
-    } else if (parametros[1].toString() == 'Soles') {
-      for (var i = 0; i < _boletas.length; i++) {
-        if (_boletas[i]['moneda'] == 'Soles') {
-          mostrar.add(_boletas[i]);
-          total.add(Total(_boletas[i]['productos']));
-          tipo_mon.add('S/.');
-        }
-      }
-    } else if (parametros[1].toString() == 'Dolares') {
-      for (var i = 0; i < _boletas.length; i++) {
-        if (_boletas[i]['moneda'] == 'Dolares') {
-          mostrar.add(_boletas[i]);
-          total.add(Total(_boletas[i]['productos']));
-          tipo_mon.add('USD');
-        }
-      }
-    }
-  }
-
-  double Total(doc) {
-    var suma = 0.00;
-    for (var ind = 0; ind < doc.length; ind++) {
-      suma += (doc[ind]['total'] * doc[ind]['cantidad']);
-    }
-    return suma;
   }
 }

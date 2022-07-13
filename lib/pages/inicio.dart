@@ -33,6 +33,30 @@ class _Inicio extends State<Inicio> {
         drawer: Drawer(
           child: list_view(context),
         ),
+        body: Column(children: [
+          const SizedBox(height: 50),
+          Center(
+            //padding: EdgeInsets.symmetric(horizontal: 50, vertical: 20),
+            child: Container(
+              height: 300,
+              width: 300,
+              decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(20),
+                  image: const DecorationImage(
+                    fit: BoxFit.cover,
+                    image: AssetImage('assets/chanchito.jpeg'),
+                  )), /*child: const Text("")*/
+            ),
+          ),
+          const Padding(
+            padding: EdgeInsets.symmetric(vertical: 50, horizontal: 20),
+            child: Text(
+              "App que facilita la emision de comprobantes de pagos electronicos",
+              style: TextStyle(color: Colors.white, fontSize: 20),
+              textAlign: TextAlign.center,
+            ),
+          ),
+        ]),
       ),
     );
   }
