@@ -28,8 +28,8 @@ Widget list_view(context) {
         },
       ),
       ListTile(
-        leading: const Icon(Icons.app_registration),
-        title: const Text("Registrar Empresa"),
+        leading: const Icon(Icons.business_sharp),
+        title: const Text("Empresas/Clientes"),
         onTap: () {
           Navigator.of(context)
               .pushNamedAndRemoveUntil("/registrar", (route) => false);
