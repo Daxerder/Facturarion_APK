@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:gofact/db/sqlite.dart';
 import 'package:gofact/models/clases.dart';
-import 'package:provider/provider.dart';
 
 class Crear_Producto extends StatefulWidget {
   @override
@@ -67,7 +66,7 @@ class _Crear_Producto extends State<Crear_Producto> {
                 TextFormField(
                   autofocus: true,
                   keyboardType: TextInputType.number,
-                  maxLength: 4,
+                  maxLength: 5,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
                   ],
@@ -148,10 +147,6 @@ class _Crear_Producto extends State<Crear_Producto> {
     var pos;
     bool punto = false;
     String palabra = texto;
-    palabra = palabra.trim();
-    setState(() {
-      _precio.text = palabra;
-    });
     for (var i = 0; i < palabra.length; i++) {
       if (texto[i] == '.') {
         if (!punto) {
@@ -175,8 +170,8 @@ class _Crear_Producto extends State<Crear_Producto> {
     return true;
   }
 
-  String funcion(valor) {
+  /* String funcion(valor) {
     String nuevo = valor.toString().toUpperCase();
     return nuevo;
-  }
+  }*/
 }

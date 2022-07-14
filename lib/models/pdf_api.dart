@@ -7,13 +7,6 @@ import 'package:open_file/open_file.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:pdf/widgets.dart';
 
-class User {
-  final String name;
-  final int age;
-
-  const User({required this.name, required this.age});
-}
-
 /*List<Producto> prod = [
   Producto(cantidad: 1, descripcion: "descripcion", total: 2),
   Producto(cantidad: 2, descripcion: "descripcion1", total: 20.0)
@@ -478,7 +471,7 @@ class PdfApi {
                                         bottom: BorderSide(width: 1),
                                       ),
                                     ),
-                                    child: Text("S/.0.00",
+                                    child: Text("$moneda 0.00",
                                         style: const TextStyle(fontSize: 9)),
                                   ),
                                 ),

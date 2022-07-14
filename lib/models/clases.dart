@@ -1,23 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
 import 'package:meta/meta.dart';
 
-Producto productoFromJson(String str) => Producto.fromJson(json.decode(str));
-String productoToJson(Producto data) => json.encode(data.toJson());
-
-class User {
-  String user = '';
-  String password = '';
-
-  User(this.user, this.password);
-}
-
-class Archivo {
-  String url;
-  File pdf;
-
-  Archivo(this.url, this.pdf);
-}
+/*Producto productoFromJson(String str) => Producto.fromJson(json.decode(str));
+String productoToJson(Producto data) => json.encode(data.toJson());*/
 
 class Empresa {
   String direccion = '';
@@ -81,4 +66,11 @@ class FoB {
     f_venc = '';
     moneda = '';
   }
+}
+
+class Archivo {
+  String url;
+  File pdf;
+
+  Archivo(this.url, this.pdf);
 }

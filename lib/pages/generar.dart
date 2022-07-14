@@ -17,6 +17,21 @@ class Generar extends StatefulWidget {
 class _Generar extends State<Generar> {
   var fecha_hoy = DateTime.now().toString() /*.toString().substring(0, 10)*/;
   List<Producto> _productos = [];
+  FoB comprobante = FoB();
+
+  List<String> _listmon = ['Soles', 'Dolares'];
+  List<String> _tipomon = ['Moneda', '']; //soles, S/.--Dolar, USD
+  List<String> _listtipo = ['Factura', 'Boleta'];
+
+  var documento = TextEditingController(),
+      direccion = TextEditingController(),
+      empresa = TextEditingController(),
+      emision = TextEditingController(),
+      vencimiento = TextEditingController();
+  var error = "";
+  var tipo = '<Comprobante>';
+  int actualpaso = 0;
+
   @override
   void initState() {
     DB.db.deleteAllProductos();
@@ -40,25 +55,6 @@ class _Generar extends State<Generar> {
       _productos = lista;
     });
   }
-
-  FoB comprobante = FoB();
-
-  List<String> _listmon = ['Soles', 'Dolares'];
-  List<String> _tipomon = ['Moneda', '']; //soles, S/.--Dolar, USD
-  List<String> _listtipo = ['Factura', 'Boleta'];
-  List<String> list_descp = [];
-
-  var documento = TextEditingController(),
-      direccion = TextEditingController(),
-      empresa = TextEditingController(),
-      emision = TextEditingController(),
-      vencimiento = TextEditingController(),
-      _producto = TextEditingController(),
-      _cantidad = TextEditingController(),
-      _precio = TextEditingController();
-  var error = "";
-  var tipo = '<Comprobante>';
-  int actualpaso = 0;
 
   List<Step> mispasos() => [
         Step(
@@ -136,7 +132,7 @@ class _Generar extends State<Generar> {
                     }
                   } else if (tipo == '<Comprobante>') {
                     SnackBar snack = const SnackBar(
-                      content: Text('Seleccion el Comprobante'),
+                      content: Text('Seleccione el Comprobante'),
                     );
                     ScaffoldMessenger.of(context).showSnackBar(snack);
                   }
@@ -338,7 +334,7 @@ class _Generar extends State<Generar> {
               if (_tipomon[0] == 'Soles') {
                 _tipomon[1] = 'S/.';
               } else {
-                _tipomon[1] = 'USD';
+                _tipomon[1] = '\$';
               }
             }),
           },
@@ -446,6 +442,23 @@ class _Generar extends State<Generar> {
         itemBuilder: (BuildContext context, int index) {
           Producto prod = _productos[index];
           return ListTile(
+            title: Container(
+              alignment: Alignment.centerLeft,
+              child: Text(prod.descripcion),
+            ),
+            leading: Container(
+              //adelante
+              alignment: Alignment.center,
+              width: 50,
+              child: Text(prod.cantidad.toString()),
+            ),
+            trailing: Container(
+              alignment: Alignment.center,
+              width: 90,
+              child: Text(_tipomon[1] +
+                  ' ' +
+                  (prod.total * prod.cantidad).toStringAsFixed(2)),
+            ),
             onTap: () {
               AlertDialog alerta = AlertDialog(
                 title: Column(
@@ -500,23 +513,6 @@ class _Generar extends State<Generar> {
               showDialog(
                   context: context, builder: (BuildContext context) => alerta);
             },
-            title: Container(
-              alignment: Alignment.centerLeft,
-              child: Text(prod.descripcion),
-            ),
-            leading: Container(
-              //adelante
-              alignment: Alignment.center,
-              width: 50,
-              child: Text(prod.cantidad.toString()),
-            ),
-            trailing: Container(
-              alignment: Alignment.center,
-              width: 90,
-              child: Text(_tipomon[1] +
-                  ' ' +
-                  (prod.total * prod.cantidad).toStringAsFixed(2)),
-            ),
           );
         },
       );

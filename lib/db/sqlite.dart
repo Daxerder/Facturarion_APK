@@ -32,7 +32,7 @@ class DB {
     });
   }
 
-  Future<int?> nuevoProductoRaw(Producto producto) async {
+  /*Future<int?> nuevoProductoRaw(Producto producto) async {
     final id = producto.id;
     final descripcion = producto.descripcion;
     final cantidad = producto.cantidad;
@@ -42,7 +42,7 @@ class DB {
     final resp = await db?.rawInsert(
         '''INSERT INTO Productos (descripcion,cantidad,total) VALUES ('$descripcion','$cantidad','$total')''');
     return resp;
-  }
+  }*/
 
   Future<int?> nuevoProducto(Producto producto) async {
     final db = await database;
@@ -50,11 +50,11 @@ class DB {
     return resp;
   }
 
-  Future<Producto?> getProductoId(int id) async {
+  /*Future<Producto?> getProductoId(int id) async {
     final db = await database;
     final resp = await db?.query('Productos', where: 'id=?', whereArgs: [id]);
     return resp!.isNotEmpty ? Producto.fromJson(resp.first) : null;
-  }
+  }*/
 
   Future<List<Producto>> getTodosProductos() async {
     final db = await database;

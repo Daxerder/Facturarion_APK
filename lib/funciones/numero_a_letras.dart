@@ -71,7 +71,7 @@ String millonesimas(int cant) {
 
 String milesimas(int cant) {
   int calcular = (cant / 1000).toInt();
-  var letras = "";
+  String letras = "";
   if (calcular < 10) {
     if (calcular == 1) {
       letras = "";
