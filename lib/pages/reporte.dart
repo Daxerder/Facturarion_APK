@@ -219,6 +219,12 @@ class _Reporte extends State<Reporte> {
         primary: const Color.fromARGB(255, 26, 37, 55),
       ),
       onPressed: () async {
+        AlertDialog alerta = const AlertDialog(
+            content: Align(
+          alignment: Alignment.center,
+          child: CircularProgressIndicator(),
+        ));
+        showDialog(context: context, builder: (BuildContext context) => alerta);
         gender = '';
         mostrar.clear();
         if (parametros[0] != '') {
@@ -243,7 +249,8 @@ class _Reporte extends State<Reporte> {
             mostrar = filtro_mes(mostrar, parametros[2]);
           }
           Navigator.push(context,
-              MaterialPageRoute(builder: (context) => Visualizacion()));
+                  MaterialPageRoute(builder: (context) => Visualizacion()))
+              .then((value) => Navigator.of(context).pop());
         } else {
           setState(() {
             error = 'No a seleccion nado ninguna opcion';
