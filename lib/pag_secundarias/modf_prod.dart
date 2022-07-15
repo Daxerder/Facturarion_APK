@@ -70,7 +70,7 @@ class _Modf_Producto extends State<Modf_Producto> {
                   controller: _cantidad,
                 ),
                 TextFormField(
-                  maxLength: 4,
+                  maxLength: 5,
                   inputFormatters: [
                     FilteringTextInputFormatter.allow(RegExp("[0-9.]")),
                   ],
