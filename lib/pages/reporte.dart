@@ -220,10 +220,10 @@ class _Reporte extends State<Reporte> {
       ),
       onPressed: () async {
         AlertDialog alerta = const AlertDialog(
-            content: Align(
-          alignment: Alignment.center,
-          child: CircularProgressIndicator(),
-        ));
+            backgroundColor: Colors.transparent,
+            content: Center(
+              child: CircularProgressIndicator(),
+            ));
         showDialog(context: context, builder: (BuildContext context) => alerta);
         gender = '';
         mostrar.clear();
