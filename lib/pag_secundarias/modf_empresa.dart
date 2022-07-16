@@ -124,7 +124,7 @@ class _Modf_Empresa extends State<Modf_Empresa> {
             children: [
               Expanded(
                 child: ElevatedButton(
-                  child: const Text("Registrar"),
+                  child: const Text("Modificar"),
                   onPressed: () async {
                     if (_direccion.text != '' && _empresa.text != '') {
                       Direccion = quitar_espacios(_direccion.text);
